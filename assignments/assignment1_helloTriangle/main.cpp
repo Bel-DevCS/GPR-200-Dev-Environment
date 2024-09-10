@@ -29,6 +29,17 @@ const char *vertexShaderSource =
             };
         )";
 
+const char *fragmentShaderSource =
+        R"(
+            #version 330 core
+            out vec4 FragColor;
+
+            void main()
+            {
+                FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+            }
+        )";
+
 int main() {
 	printf("Initializing...");
 	if (!glfwInit()) {
@@ -74,14 +85,43 @@ int main() {
     }
 
 
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    int success2;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success2);
+
+    if(!success2)
+    {
+        char infoLog[512];
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+
     //Render loop
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 		//Clear framebuffer
 		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+        glUseProgram(shaderProgram);
+
 		//Drawing happens here!
 		glfwSwapBuffers(window);
+
 	}
 	printf("Shutting down...");
 
