@@ -13,9 +13,10 @@ const int SCREEN_HEIGHT = 720;
 //Create Shape
 float vertices[] =
         {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.0f,  0.5f, 0.0f
+        //        X     Y     Z         R     G     B      A
+                -0.5f, -0.5f, 0.0f,     1.0f, 0.0f, 0.0f, 1.0f,
+                0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f, 1.0f,
+                0.0f,  0.5f, 0.0f,      0.0f, 0.0f, 1.0f, 1.0f
         };
 
     #pragma region Shader Sources
@@ -23,10 +24,14 @@ const char *vertexShaderSource =
         R"(
             #version 330 core
             layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec4 aColour;
+
+            out vec4 Colour; //Varying
 
             void main()
             {
-               gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\
+               Colour = aColour; //Pass-through
+               gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
             };
         )";
 
@@ -35,9 +40,13 @@ const char *fragmentShaderSource =
             #version 330 core
             out vec4 FragColor;
 
+            in vec4 Colour;
+
+            uniform float uTime = 1.0;
+
             void main()
             {
-                FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+                FragColor = Colour; //vec4(1.0f, 0.5f, 0.2f, 1.0f);
             }
         )";
 
@@ -67,25 +76,25 @@ int main() {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0); //3
 #pragma endregion
 
     #pragma region Create Vertex Buffer Object
     unsigned int VBO;
     glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO); //2
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //3
     //Dynamic Draw is for every once in a while manipulation, Stream Draw is for every frame
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    //position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0); //4
     glEnableVertexAttribArray(0);
+
+    //Colour (R,G,B,A)
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // glBindBuffer(GL_ARRAY_BUFFER, 0); //clears buffer
     //glNamedBufferData(VBO, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW); //2
 #pragma endregion
 
     #pragma region Vertex Shader
@@ -141,14 +150,24 @@ int main() {
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 
+        //Input
+
+        //Update
+        float time = (float)glfwGetTime();
+
 		//Clear framebuffer
 		glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3); //todo : figure out what this does
 
+        //Set Time Unit
+        int timeLoc = glGetUniformLocation(shaderProgram, "uTime");
+        glUniform1f(timeLoc, time);
+        glBindVertexArray(VAO);
+
+        //Draw Call
+        glDrawArrays(GL_TRIANGLES, 0, 3); //todo : figure out what this does
 
         //Drawing happens here!
 		glfwSwapBuffers(window);
