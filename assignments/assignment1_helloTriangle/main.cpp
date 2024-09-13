@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
+
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
 
@@ -28,10 +29,14 @@ const char *vertexShaderSource =
 
             out vec4 Colour; //Varying
 
+            uniform float uTime;
+
             void main()
             {
                Colour = aColour; //Pass-through
-               gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+               vec3 pos = aPos;
+               pos.y += (sin(uTime) * 5.0 + pos.x) / 4;
+               gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
             };
         )";
 
@@ -46,7 +51,7 @@ const char *fragmentShaderSource =
 
             void main()
             {
-                FragColor = Colour; //vec4(1.0f, 0.5f, 0.2f, 1.0f);
+                FragColor = Colour * (sin(uTime) * 0.5 + 0.5);
             }
         )";
 
