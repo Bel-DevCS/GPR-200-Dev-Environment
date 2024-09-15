@@ -10,8 +10,14 @@ uniform float uTime;
 
 void main()
 {
+    //Initial Declarations
     Colour = aColour; // Pass-through
     vec3 pos = aPos;
-    pos.y += (sin(uTime) * 5.0 + pos.x) / 4.0;
-    gl_Position = vec4(pos.x, pos.y, pos.z, 1.0);
+
+    //Position Animation
+    float bounce = sin(uTime * 2.0) * 0.1;
+    pos.y += bounce;
+
+    //Position Declaration
+    gl_Position = vec4(pos, 1.0);
 }

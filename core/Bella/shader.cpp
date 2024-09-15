@@ -3,12 +3,13 @@ namespace Bella_GPR200
 {
     Shader::Shader(const char *vertexPath, const char *fragmentPath)
     {
+        //1 : Get Shader Information
         std::string vertexCode;
         std::string fragmentCode;
         std::ifstream vShaderFile;
         std::ifstream fShaderFile;
 
-        //Check
+        #pragma region 2 : Check if Shader Reading Failed
         vShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
         fShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
@@ -33,17 +34,19 @@ namespace Bella_GPR200
         {
             std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
         }
+#pragma endregion
 
+        //3 : Declare Shader Code
         const char* vShaderCode = vertexCode.c_str();
         const char* fShaderCode = fragmentCode.c_str();
 
-        #pragma region Compile Shader
+        #pragma region 4 : Compile Shader
         unsigned int vertex, fragment;
         int success;
         char infoLog[512];
 #pragma endregion
 
-        #pragma region Vertex Shader
+        #pragma region 5 : Vertex Shader
         vertex = glCreateShader(GL_VERTEX_SHADER);
         glShaderSource(vertex, 1, &vShaderCode, NULL);
         glCompileShader(vertex);
@@ -56,7 +59,7 @@ namespace Bella_GPR200
         };
 #pragma endregion
 
-        #pragma region Fragment Shader
+        #pragma region 6  : Fragment Shader
         fragment = glCreateShader(GL_FRAGMENT_SHADER);
         glShaderSource(fragment, 1, &fShaderCode, NULL);
         glCompileShader(fragment);
@@ -70,8 +73,7 @@ namespace Bella_GPR200
         };
 #pragma endregion
 
-
-        #pragma region Write and Link Shader Program
+        #pragma region 7 : Write and Link Shader Program
         ID = glCreateProgram();
         glAttachShader(ID, vertex);
         glAttachShader(ID, fragment);
@@ -85,6 +87,7 @@ namespace Bella_GPR200
         }
 #pragma endregion
 
+        //8 : Delete Shader Information
         glDeleteShader(vertex);
         glDeleteShader(fragment);
     }

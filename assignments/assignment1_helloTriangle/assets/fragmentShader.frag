@@ -9,5 +9,11 @@ uniform float uTime;
 
 void main()
 {
-    FragColor = Colour * (sin(uTime) * 0.5 + 0.5);
+    //Colour Animation
+    float speed = 1.0;
+    float intensity = 0.5;
+    float oscillation = sin(uTime * speed) * intensity + 0.5;
+
+    //Colour Declaration
+    FragColor = Colour * oscillation;
 }
