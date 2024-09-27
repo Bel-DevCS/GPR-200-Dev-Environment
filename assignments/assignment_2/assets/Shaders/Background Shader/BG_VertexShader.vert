@@ -5,24 +5,20 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 aColour;
 layout (location = 2) in vec2 aTexCoord;
 
-out vec4 Colour; // Varying
+out vec4 Colour; // Pass-through
 out vec2 TexCoord;
 
 uniform float uTime;
 
 void main()
 {
-    //Initial Declarations
-    Colour = aColour; // Pass-through
-    vec3 pos = aPos;
+    // Pass the color through
+    Colour = aColour;
 
-    //Position Animation
-    float bounce = (sin(uTime * 2.0) * - pos.x) / 12;
-    //pos.y += bounce;
+    // Position stays the same
+    gl_Position = vec4(aPos, 1.0);
 
-    //Position Declaration
-    gl_Position = vec4(pos, 1.0);
-
-    //Texture Declaration?
-    TexCoord = aTexCoord;
+    // Scroll the texture coordinates over time
+    float scrollSpeed = 0.2;  // Adjust this to control the scrolling speed
+    TexCoord = vec2(aTexCoord.x + uTime * scrollSpeed, aTexCoord.y); // Scroll along the x-axis
 }
