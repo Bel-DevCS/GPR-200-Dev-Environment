@@ -20,9 +20,13 @@ void main()
     float bounce = sin(uTime * 2.0) * 0.1;
     pos.y += bounce;
 
+    // Scaling Factor
+    float scale = 0.5;
+    pos *= scale;
+
     //Position Declaration
     gl_Position = vec4(pos, 1.0);
 
     //Texture Declaration?
-    TexCoord = aTexCoord;
+    TexCoord = aTexCoord / 2.0;
 }

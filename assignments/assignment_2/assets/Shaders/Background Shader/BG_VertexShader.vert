@@ -19,6 +19,6 @@ void main()
     gl_Position = vec4(aPos, 1.0);
 
     // Scroll the texture coordinates over time
-    float scrollSpeed = 0.2;  // Adjust this to control the scrolling speed
-    TexCoord = vec2(aTexCoord.x + uTime * scrollSpeed, aTexCoord.y); // Scroll along the x-axis
+    float scrollSpeed = 0.2; //Scroll Speed
+    TexCoord = vec2(aTexCoord.x + uTime * scrollSpeed, aTexCoord.y);
 }

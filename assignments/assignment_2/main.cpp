@@ -56,98 +56,55 @@ int main() {
             "assets/Shaders/Character Shader/Character_FragmentShader.frag");
 
     // 3: Instantiate textures
-    Bella_GPR200::Texture2D BGTexture("assets/Images/AssignmentImages/BackgroundImages/BG.jpg");
+    Bella_GPR200::Texture2D BGTexture("assets/Images/AssignmentImages/BackgroundImages/BG.jpg",
+                                      GL_TEXTURE_MIN_FILTER,
+                                      GL_NEAREST);
     Bella_GPR200::Texture2D characterTexture("assets/Images/AssignmentImages/CharacterImages/Character.png");
 
-    #pragma region //4 : Background
-    //4(a) :  Background Quad (Full Screen)
-    float backgroundVertices[] = {
+    Bella_GPR200::Texture2D BG_Smile("assets/Images/ExampleImages/awesomeface.png");
+
+    float vertices[] = {
             // Positions        Colors           Texture Coords
-            1.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  1.0f, 1.0f,  // Top right
-            1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // Bottom right
+            1.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  2.0f, 2.0f,  // Top right
+            1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  2.0f, 0.0f,  // Bottom right
             -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  0.0f, 0.0f,  // Bottom left
-            -1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f,  0.0f, 1.0f   // Top left
+            -1.0f,  1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f,  0.0f, 2.0f   // Top left
     };
 
-    unsigned int backgroundIndices[] = {
+    unsigned int indices[] = {
             0, 1, 2,  // First triangle
             0, 2, 3   // Second triangle
     };
 
+// Create the VAO, VBO, and EBO
+    unsigned int VAO, VBO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
-// 4(b) : VAO, VBO, and EBO for background
-    unsigned int backgroundVAO, backgroundVBO, backgroundEBO;
-    glGenVertexArrays(1, &backgroundVAO);
-    glGenBuffers(1, &backgroundVBO);
-    glGenBuffers(1, &backgroundEBO);
+    glBindVertexArray(VAO);
 
-    glBindVertexArray(backgroundVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, backgroundVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(backgroundVertices), backgroundVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, backgroundEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(backgroundIndices), backgroundIndices, GL_STATIC_DRAW);
-
-// 4(c) :  Vertex positions
+// Position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-// 4(d) :  Vertex colors
+// Color attribute
     glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-//  4(5) : Texture coordinates
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-#pragma endregion
-
-    #pragma region //5 : Character
-
-    // 5(a) : Character Shape
-    float characterVertices[] = {
-            // Positions        Colors           Texture Coords
-            0.5f,  0.75f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f,  1.0f, 1.0f,  // Top right
-            0.5f, -0.75f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // Bottom right
-            -0.5f, -0.75f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f,  0.0f, 0.0f,  // Bottom left
-            -0.5f,  0.75f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f,  0.0f, 1.0f   // Top left
-    };
-
-    unsigned int characterIndices[] = {
-            0, 1, 2,  // First triangle
-            0, 2, 3   // Second triangle
-    };
-
-// 5(b) : VAO, VBO, and EBO for character
-    unsigned int characterVAO, characterVBO, characterEBO;
-    glGenVertexArrays(1, &characterVAO);
-    glGenBuffers(1, &characterVBO);
-    glGenBuffers(1, &characterEBO);
-
-    glBindVertexArray(characterVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, characterVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(characterVertices), characterVertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, characterEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(characterIndices), characterIndices, GL_STATIC_DRAW);
-
-// 5(c) : Vertex positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-//  5(d) : Vertex colors
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
-//  5(e) : Texture coordinates
+// Texture coordinate attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-#pragma endregion
 
 
-    // 6: Render loop
+
     while (!glfwWindowShouldClose(window)) {
 
         // Clear the screen
@@ -158,8 +115,12 @@ int main() {
         BGShader.use();
         BGShader.setFloat("uTime", glfwGetTime());
         BGTexture.Bind(0);
+        BG_Smile.Bind(1);
+        BGShader.setInt("texture1", 0);
+        BGShader.setBool("texture2", 1);
 
-        glBindVertexArray(backgroundVAO);
+
+        glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Draw the character
@@ -167,7 +128,7 @@ int main() {
         characterShader.setFloat("uTime", glfwGetTime());
         characterTexture.Bind(0);
 
-        glBindVertexArray(characterVAO);
+        glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // Swap buffers and poll events
