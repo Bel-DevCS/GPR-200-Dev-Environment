@@ -17,7 +17,8 @@ set(CORE_INC_DIR
 
 add_library(core STATIC ${CORE_SRC} ${CORE_INC}
         Bella/shader.h
-        Bella/shader.cpp)
+        Bella/shader.cpp
+        Bella/texture.h)
 
 find_package(OpenGL REQUIRED)
 

@@ -3,8 +3,10 @@
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 aColour;
+layout (location = 2) in vec2 aTexCoord;
 
 out vec4 Colour; // Varying
+out vec2 TexCoord;
 
 uniform float uTime;
 
@@ -16,8 +18,11 @@ void main()
 
     //Position Animation
     float bounce = sin(uTime * 2.0) * 0.1;
-    pos.y += bounce;
+  //  pos.y += bounce;
 
     //Position Declaration
     gl_Position = vec4(pos, 1.0);
+
+    //Texture Declaration?
+    TexCoord = aTexCoord;
 }
