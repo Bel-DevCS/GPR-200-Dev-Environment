@@ -18,7 +18,6 @@ namespace Bella_GPR200
 
         void Bind(unsigned int slot = 0) const;
 
-
     private:
         unsigned int m_id;
         int m_width, m_height, m_nrChannels;

@@ -32,6 +32,8 @@ namespace Bella_GPR200
             //4(c) : Filter Texture
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMode);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMode);
+
+            stbi_set_flip_vertically_on_load(true);
         }
 
         else {  std::cerr << "Failed to load texture: " << filePath << std::endl; }

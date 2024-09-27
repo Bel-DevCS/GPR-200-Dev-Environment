@@ -47,108 +47,85 @@ int main() {
     }
 #pragma endregion
 
-    //2 : Instantiate Shader
-    Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
+    // 2: Instantiate shaders
+    Bella_GPR200::Shader BGShader(
+            "assets/Shaders/Background Shader/BG_VertexShader.vert",
+            "assets/Shaders/Background Shader/BG_FragmentShader.frag");
+    Bella_GPR200::Shader characterShader(
+            "assets/Shaders/Character Shader/Character_VertexShader.vert",
+            "assets/Shaders/Character Shader/Character_FragmentShader.frag");
 
-    //3 : Initiate Texture(s)
-    Bella_GPR200::Texture2D myTexture("assets/Images/ExampleImages/container.jpg");
+    // 3: Instantiate textures
+    Bella_GPR200::Texture2D BGTexture("assets/Images/AssignmentImages/BackgroundImages/BG.jpg");
+    Bella_GPR200::Texture2D characterTexture("assets/Images/AssignmentImages/CharacterImages/Character.png");
 
-    //4(a) : Create Shape
-    float vertices[] =
-            {
-            //       X     Y     Z         R     G     B     A       S    T      R
-                    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,     1.0f, 1.0f, 1.0f,  // Top right
-                    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,    1.0f, 0.0f, 1.0f,  // Bottom right
-                    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,    0.0f, 0.0f, 1.0f,  // Bottom left
-                    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f, 1.0f,    0.0f, 1.0f, 1.0f,  // Top left
+    // 4: Quad vertices
+    float vertices[] = {
+            // Positions            Colors                  Texture Coords
+            0.5f,  0.5f, 0.0f,      1.0f, 0.0f, 0.0f,      1.0f,  1.0f, 1.0f,  // Top right
+            0.5f, -0.5f, 0.0f,      0.0f, 1.0f, 0.0f,      1.0f,  1.0f, 0.0f,  // Bottom right
+            -0.5f, -0.5f, 0.0f,     0.0f, 0.0f, 1.0f,      1.0f,  0.0f, 0.0f,  // Bottom left
+            -0.5f,  0.5f, 0.0f,     1.0f, 1.0f, 0.0f,      1.0f,  0.0f, 1.0f   // Top left
+    };
 
-            };
+    unsigned int indices[] = {
+            0, 1, 2,  // First triangle
+            0, 2, 3   // Second triangle
+    };
 
-    unsigned int indices[] =
-            {
-                0, 1, 2,    //Triangle 1
-                0, 2, 3     //Triangle 2
-            };
-
-    //4(b) : Create Texture Coords
-    float texCoords[] =
-            {
-                    0.0f, 0.0f,
-                    1.0f, 0.0f,
-                    0.0f, 1.0f,
-                    1.0f, 1.0f
-            };
-
-
-
-    //glTexParameteri (Texture Target, Which Option for which axis [S,T,R == X,Y,Z], Texture Wrap Type)
-    //TexParameteri -> Texture Parameter Integer
-    //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    //glTexParameterfv(Texture Target, Action, Applied Filter / Action)
-
-
-
-    //5 : Instantiate Vertex Array Object, and Vertex Buffer Object
-    unsigned int VBO, VAO;
+    // 5: Set up VAO, VBO, EBO
+    unsigned int VAO, VBO, EBO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-
-    //6 : Initiate Element Buffer Object
-    unsigned int EBO;
     glGenBuffers(1, &EBO);
 
-    //7 : Bind Vertex Array Object
     glBindVertexArray(VAO);
 
-    //8 : Bind Vertex Array Object
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //9 : Bind Element Buffer Object
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    //10 : Attribute Pointer for Position (X,Y,Z)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
+    // Vertex positions
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    //11 : Attribute Pointer for Colour (R,G,B,A)
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(4 * sizeof(float)));
+    // Vertex colors
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    //12 : Attribute Pointer for Texture (S,T)
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(7 * sizeof(float)));
+    // Texture coordinates
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    //13 : Render Loop
+    // 6: Render loop
     while (!glfwWindowShouldClose(window)) {
 
-        //13(a) : Clear the Screen
+        // Clear the screen
         glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //13(b) : Instantiate Shader Uniforms
-        float timeValue = glfwGetTime();
-        ourShader.setFloat("uTime", timeValue);
+        // 7: Draw background
+        BGShader.use();
+        BGShader.setFloat("uTime", glfwGetTime());
+        BGTexture.Bind(0);
 
-
-        //13(c) : Use Shader and Bind Vertex Array to Shader
-        ourShader.use();
-        myTexture.Bind();
         glBindVertexArray(VAO);
-
-        //13(d) : Draw Call
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        // 8: Draw character
+        characterShader.use();
+        characterShader.setFloat("uTime", glfwGetTime());
+        characterTexture.Bind(0);
 
-        //13(e) : Swap Buffers
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // Swap buffers and poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
-
     }
 
-    //14 : Terminate Program
-    printf("Shutting down...");
+    // Terminate program
     glfwTerminate();
-
 }
