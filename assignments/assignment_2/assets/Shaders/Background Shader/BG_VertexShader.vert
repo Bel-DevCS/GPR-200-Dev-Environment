@@ -20,5 +20,5 @@ void main()
 
     // Scroll the texture coordinates over time
     float scrollSpeed = 0.2; //Scroll Speed
-    TexCoord = vec2(aTexCoord.x + uTime * scrollSpeed, aTexCoord.y);
+    TexCoord = vec2(aTexCoord.x + uTime * scrollSpeed, aTexCoord.y) /2 ;
 }
