@@ -5,6 +5,8 @@
 #include <ew/ewMath/ewMath.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
 #include <Bella/shader.h>
@@ -51,10 +53,22 @@ int main() {
     float vertices[] =
             {
                     //X     Y     Z         R     G     B      A
-                    -0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,
-                    0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f, 1.0f,
-                    0.0f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f, 1.0f
+                    -0.5f, -0.5f, 0.0f,    1.0f, 0.302f, 0.506f, 1.0f, //Magenta
+                    0.5f, -0.5f, 0.0f,     0.98, 1.0f, 0.302f, 1.0f, //Yellow
+                    0.0f,  0.5f, 0.0f,     0.537f, 0.8f, 1.0f, 1.0f //Cyan
             };
+
+    /*
+    glm::mat4 scale(float x, float y, float z)
+    {
+        return glm::mat4
+        (
+                x, 0.0, 0.0, 0.0,
+
+                )
+    }
+     */
+
 
     //4 : Instantiate Vertex Array Object, and Vertex Buffer Object
     unsigned int VBO, VAO;
@@ -87,9 +101,15 @@ int main() {
         float timeValue = glfwGetTime();
         ourShader.setFloat("uTime", timeValue);
 
+
         //9(c) : Use Shader and Bind Vertex Array to Shader
         ourShader.use();
         glBindVertexArray(VAO);
+
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        ourShader.setMat4("uTransform", transform);
+
 
         //9(d) : Draw Call
         glDrawArrays(GL_TRIANGLES, 0, 3);

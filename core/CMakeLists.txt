@@ -18,11 +18,12 @@ set(CORE_INC_DIR
 add_library(core STATIC ${CORE_SRC} ${CORE_INC}
         Bella/shader.h
         Bella/shader.cpp
-        Bella/texture.h)
+        Bella/texture.h
+)
 
 find_package(OpenGL REQUIRED)
 
-target_link_libraries(core PUBLIC IMGUI)
+target_link_libraries(core PUBLIC IMGUI glm)
 
 install (TARGETS core DESTINATION lib)
 install (FILES ${CORE_INC} DESTINATION include/core)

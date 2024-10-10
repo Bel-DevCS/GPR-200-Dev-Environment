@@ -15,5 +15,7 @@ void main()
     float oscillation = sin(uTime * speed) * intensity + 0.5;
 
     //Colour Declaration
-    FragColor = Colour * oscillation;
+    //FragColor = Colour * oscillation;
+
+    FragColor = Colour;
 }

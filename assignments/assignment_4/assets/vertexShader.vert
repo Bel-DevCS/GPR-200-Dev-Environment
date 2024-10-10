@@ -4,20 +4,14 @@
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec4 aColour;
 
-out vec4 Colour; // Varying
+out vec4 Colour;
 
-uniform float uTime;
+uniform mat4 uTransform;  // Transformation matrix from C++ code
 
 void main()
 {
-    //Initial Declarations
     Colour = aColour; // Pass-through
-    vec3 pos = aPos;
 
-    //Position Animation
-    float bounce = sin(uTime * 2.0) * 0.1;
-    pos.y += bounce;
-
-    //Position Declaration
-    gl_Position = vec4(pos, 1.0);
+    // Apply transformation to the vertex position
+    gl_Position = uTransform * vec4(aPos, 1.0);
 }
