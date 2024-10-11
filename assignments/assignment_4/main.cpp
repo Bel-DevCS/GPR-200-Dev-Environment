@@ -11,9 +11,21 @@
 
 #include <Bella/shader.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
+
 
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
+
+void printMatrix(const glm::mat4& matrix) {
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            std::cout << matrix[col][row] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
 
 
 int main() {
@@ -58,17 +70,51 @@ int main() {
                     0.0f,  0.5f, 0.0f,     0.537f, 0.8f, 1.0f, 1.0f //Cyan
             };
 
-    /*
-    glm::mat4 scale(float x, float y, float z)
-    {
-        return glm::mat4
-        (
-                x, 0.0, 0.0, 0.0,
 
-                )
-    }
-     */
 
+    //Matrix Practice
+    glm::mat4 demoMatrix = glm::mat4(1.0f); //Identity Matrix
+     std::cout << "Initial Matrix (Identity): " << std::endl;
+     std::cout << glm::to_string(demoMatrix) << std::endl;
+
+    demoMatrix = glm::scale(demoMatrix, glm::vec3(2.0f, 3.0f, 1.0f));
+
+    std::cout << "After Scaling (2x, 3y): " << std::endl;
+    std::cout << glm::to_string(demoMatrix) << std::endl;
+
+    float angleInRadians = glm::radians(45.0f); // Convert degrees to radians
+    demoMatrix = glm::rotate(demoMatrix, angleInRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+    std::cout << "After Rotation (45 degrees Z-axis): " << std::endl;
+    std::cout << glm::to_string(demoMatrix) << std::endl;
+
+    demoMatrix = glm::translate(demoMatrix, glm::vec3(1.0f, 2.0f, 0.0f));
+
+    std::cout << "After Translation (+1x, +2y): " << std::endl;
+    std::cout << glm::to_string(demoMatrix) << std::endl;
+
+
+    for(int i = 0; i < 3; i++)
+        std::cout << std::endl;
+
+
+    glm::mat4 manualMatrix = glm::mat4(1.0f);
+    printMatrix(manualMatrix);
+    std::cout << "\n\n\n";
+
+    manualMatrix[0][0] = 2.0f;  // X-axis scaling
+    manualMatrix[1][1] = 3.0f;  // Y-axis scaling
+    manualMatrix[2][2] = 1.0f;  // Z-axis scaling
+    printMatrix(manualMatrix);
+    std::cout << "\n\n\n";
+
+    float angle = glm::radians(45.0f);  // Convert to radians
+    manualMatrix[0][0] = cos(angle);   // cos(θ)
+    manualMatrix[1][0] = sin(angle);   // sin(θ)
+    manualMatrix[0][1] = -sin(angle);  // -sin(θ)
+    manualMatrix[1][1] = cos(angle);
+    printMatrix(manualMatrix);
+    std::cout << "\n\n\n";
 
     //4 : Instantiate Vertex Array Object, and Vertex Buffer Object
     unsigned int VBO, VAO;
