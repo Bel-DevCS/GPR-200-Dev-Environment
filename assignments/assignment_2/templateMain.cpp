@@ -52,8 +52,8 @@ void Template() {
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
 
     //3 : Initiate Texture(s)
-    Bella_GPR200::Texture2D myTexture("assets/Images/ExampleImages/container.jpg");
-    Bella_GPR200::Texture2D faceTexture("assets/Images/ExampleImages/awesomeface.png");
+    Bella_GPR200::Texture2D myTexture("assets/Images/Example_Images/container.jpg");
+    Bella_GPR200::Texture2D faceTexture("assets/Images/Example_Images/awesomeface.png");
 
     //4(a) : Create Shape
     float vertices[] =

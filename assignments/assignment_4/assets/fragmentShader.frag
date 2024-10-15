@@ -4,8 +4,10 @@
 out vec4 FragColor;
 
 in vec4 Colour;
+in vec2 TexCoord;
 
 uniform float uTime;
+uniform sampler2D bgTex;
 
 void main()
 {
@@ -17,5 +19,8 @@ void main()
     //Colour Declaration
     //FragColor = Colour * oscillation;
 
-    FragColor = Colour;
+   // FragColor = Colour;
+
+    vec4 texColor = texture(bgTex, TexCoord);
+    FragColor = texColor;
 }
