@@ -88,47 +88,47 @@ namespace Bella_GPR200
     }
     unsigned int DrawShape::Cube()
     {
+
         // Cube vertices (positions, colors, texture coordinates)
-        float vertices[] =
-                {
-                // Positions          // Colors           // Texture Coords
+        // Define cube vertices (positions, colors, texture coordinates)
+        float vertices[] = {
+                // Positions          // Colors           // Texture Coords (S, T)
                 // Front face
-                0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 0.0f, 1.0f,  1.0f, 1.0f, // Top right
-                0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f, // Bottom right
-                -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f,  0.0f, 0.0f, // Bottom left
-                -0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f,  0.0f, 1.0f, // Top left
+                0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f, 1.0f,  // Front top-right
+                0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f, 1.0f,  // Front bottom-right
+                -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // Front bottom-left
+                -0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,  // Front top-left
 
                 // Back face
-                0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 1.0f,  1.0f, 1.0f, // Top right
-                0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 0.0f, // Bottom right
-                -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,  0.0f, 0.0f, // Bottom left
-                -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f, 1.0f,  0.0f, 1.0f, // Top left
+                0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f, 1.0f,  // Back top-right
+                0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f, 1.0f,  // Back bottom-right
+                -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // Back bottom-left
+                -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,  // Back top-left
 
                 // Left face
-                -0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, // Top right
-                -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f, // Bottom right
-                -0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f, // Bottom left
-                -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f, // Top left
+                -0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f, 1.0f,  // Left top-right
+                -0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f, 1.0f,  // Left bottom-right
+                -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // Left bottom-left
+                -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,  // Left top-left
 
                 // Right face
-                0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, // Top right
-                0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f, // Bottom right
-                0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f, // Bottom left
-                0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f, // Top left
+                0.5f,  0.5f,  0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f, 1.0f,  // Right top-right
+                0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f, 1.0f,  // Right bottom-right
+                0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // Right bottom-left
+                0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,  // Right top-left
 
                 // Top face
-                0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, // Top right
-                -0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f, // Bottom right
-                -0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f, // Bottom left
-                0.5f,  0.5f,  0.5f,   0.0f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f, // Top left
+                0.5f,  0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f, 1.0f,  // Top top-right
+                -0.5f,  0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,  // Top bottom-right
+                -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // Top bottom-left
+                0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f, 1.0f,  // Top top-left
 
                 // Bottom face
-                0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  1.0f, 1.0f, // Top right
-                -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 1.0f, 1.0f,  1.0f, 0.0f, // Bottom right
-                -0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f, 1.0f,  0.0f, 0.0f, // Bottom left
-                0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f, 1.0f,  0.0f, 1.0f  // Top left
+                0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f, 1.0f,   1.0f, 1.0f, 1.0f,  // Bottom top-right
+                -0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f, 1.0f,   0.0f, 1.0f, 1.0f,  // Bottom bottom-right
+                -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // Bottom bottom-left
+                0.5f, -0.5f,  0.5f,   1.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f, 1.0f   // Bottom top-left
         };
-
 
         unsigned int indices[] = {
                 // Front face
@@ -151,36 +151,40 @@ namespace Bella_GPR200
                 21, 22, 23
         };
 
-        // 1. Create VAO, VBO, and EBO
         unsigned int VAO, VBO, EBO;
+
+        // Generate VAO, VBO, EBO
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
 
-        // 2. Bind VAO
+        // Bind VAO
         glBindVertexArray(VAO);
 
-        // 3. Bind and set vertex buffer
+        // Bind and fill VBO with vertex data
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-        // 4. Bind and set element buffer (indices)
+        // Bind and fill EBO with index data
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-        // 5. Set vertex attribute pointers
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)0); // Position
+        // Set vertex attribute pointers
+        // Position (X, Y, Z) -> 3 floats
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
-        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(3 * sizeof(float))); // Color
+        // Color (R, G, B, A) -> 4 floats
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 9 * sizeof(float), (void*)(7 * sizeof(float))); // Texture coords
+        // Texture coordinates (S, T, R) -> 3 floats
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 10 * sizeof(float), (void*)(7 * sizeof(float)));
         glEnableVertexAttribArray(2);
 
-        // 6. Unbind the VAO to prevent accidental modifications
+        // Unbind VAO to prevent accidental modifications
         glBindVertexArray(0);
 
-        return VAO; // Return the VAO so it can be used in the render loop
+        return VAO;
     }
 }

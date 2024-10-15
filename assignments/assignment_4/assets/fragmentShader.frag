@@ -8,6 +8,7 @@ in vec2 TexCoord;
 
 uniform float uTime;
 uniform sampler2D bgTex;
+uniform vec4 cubeColour;
 
 void main()
 {
@@ -22,5 +23,5 @@ void main()
    // FragColor = Colour;
 
     vec4 texColor = texture(bgTex, TexCoord);
-    FragColor = texColor;
+    FragColor = texColor * (cubeColour * oscillation);
 }

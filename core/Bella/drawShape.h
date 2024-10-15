@@ -1,4 +1,5 @@
 #include "../ew/external/glad.h"
+#include <glm/glm.hpp>
 namespace Bella_GPR200
 {
     class DrawShape
@@ -7,6 +8,7 @@ namespace Bella_GPR200
 
             static unsigned int Triangle();
             static unsigned int Quad();
+
             static unsigned int Cube();
     };
 }

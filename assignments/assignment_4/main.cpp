@@ -13,6 +13,7 @@
 #include <Bella/definitionFunctions.h>
 #include <Bella/texture.h>
 #include <Bella/drawShape.h>
+#include <Bella/definitionColours.h>
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
@@ -41,7 +42,7 @@ int main() {
     }
 
     //1(c) : Create Window
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello Triangle", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "3D Transforms and Triangles", NULL, NULL);
     if (window == NULL) {
         printf("GLFW failed to create window");
         return 1;
@@ -60,17 +61,46 @@ int main() {
 
     unsigned int cubeVAO = Bella_GPR200::DrawShape::Cube();
 
-    //Matrices?
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.5f, 1.0f, 0.0f));
+    glm::vec3 cubePositions[] =
+            {
+                glm::vec3(0.0f,  0.0f,  0.0f),
+                glm::vec3(2.0f,  5.0f, -15.0f),
+                glm::vec3(-1.5f, -2.2f, -2.5f),
+                glm::vec3(-3.8f, -2.0f, -12.3f),
+                glm::vec3(2.4f, -0.4f, -3.5f),
+                glm::vec3(-1.7f,  3.0f, -7.5f),
+                glm::vec3(1.3f, -2.0f, -2.5f),
+                glm::vec3(1.5f,  2.0f, -2.5f),
+                glm::vec3(1.5f,  0.2f, -1.5f),
+                glm::vec3(-1.3f,  1.0f, -1.5f)
+            };
 
-    glm::mat4 view = glm::mat4(1.0f);
-// note that we're translating the scene in the reverse direction of where we want to move
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+    float rotationSpeeds[] = { 20.0f, 30.0f, 40.0f, 50.0f, 25.0f, 35.0f, 15.0f, 45.0f, 60.0f, 10.0f };
 
+
+    glm::vec3 rotationAxes[] = {
+            glm::vec3(1.0f, 0.3f, 0.5f),
+            glm::vec3(0.5f, 1.0f, 0.3f),
+            glm::vec3(0.3f, 0.5f, 1.0f),
+            glm::vec3(1.0f, 0.7f, 0.2f),
+            glm::vec3(0.2f, 1.0f, 0.8f),
+            glm::vec3(0.6f, 0.4f, 1.0f),
+            glm::vec3(0.3f, 1.0f, 0.5f),
+            glm::vec3(1.0f, 0.6f, 0.3f),
+            glm::vec3(0.8f, 0.3f, 1.0f),
+            glm::vec3(1.0f, 0.2f, 0.7f)
+    };
+
+    float scales[] = { 1.0f, 1.2f, 0.8f, 1.1f, 0.9f, 1.3f, 1.0f, 0.7f, 1.4f, 0.6f };
+
+    //glm::vec4* cubeColors = Colour::RandomColour(10);
+    glm::vec4* cubeColours = Bella_GPR200::Colour::RandomColour(10);
+
+
+    // Matrices (projection and view)
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
 
 
     //9 : Render Loop
@@ -78,35 +108,53 @@ int main() {
 
         glEnable(GL_DEPTH_TEST);
 
+        //Calculate Delta Time
+        float currentFrame = glfwGetTime();
+        float deltaTime = currentFrame;
+
         //9(a) : Clear the Screen
         glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        //9(b) : Instantiate Shader Uniforms
-        float timeValue = glfwGetTime();
-        ourShader.setFloat("uTime", timeValue);
 
 
         //9(c) : Use Shader and Bind Vertex Array to Shader
         aText.Bind(0);
         ourShader.use();
-        glBindVertexArray(cubeVAO);
 
 
-        //glm::mat4 transform = glm::mat4(1.0f);
-        //transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        //ourShader.setMat4("uTransform", model);
-
-        model = glm::rotate(model, timeValue / 5 * glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-
-
-        ourShader.setMat4("model", model);
+        //Set Matrices
         ourShader.setMat4("view", view);
         ourShader.setMat4("projection", projection);
 
+        //Set Time
+        ourShader.setFloat("uTime", currentFrame);
 
-        //9(d) : Draw Call
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        //Bind
+        glBindVertexArray(cubeVAO);
+
+        for (unsigned int i = 0; i < 10; i++) {
+            // Create model matrix for each cube
+            glm::mat4 model = glm::mat4(1.0f);
+
+            // Translate cube to its position
+            model = glm::translate(model, cubePositions[i]);
+
+            // Rotate cube over time
+            float angle = rotationSpeeds[i] * currentFrame;
+            model = glm::rotate(model, glm::radians(angle), rotationAxes[i]);
+
+            //Scale :3
+            model = glm::scale(model, glm::vec3(scales[i]));
+
+            // Send the model matrix to the shader
+            ourShader.setMat4("model", model);
+
+            //Set Colour
+            ourShader.setVec4("cubeColour", cubeColours[i]);
+
+            // Draw the cube
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        }
 
 
         //9(e) : Swap Buffers
@@ -116,6 +164,7 @@ int main() {
     }
 
     //10 : Terminate Program
+    delete[] cubeColours;
     printf("Shutting down...");
     glfwTerminate();
 

@@ -110,5 +110,10 @@ namespace Bella_GPR200
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
+    void Shader::setVec4(const std::string &name, const glm::vec4 &value) const
+    {
+        glUniform4f(glGetUniformLocation(ID, name.c_str()), value.x, value.y, value.z, value.w);
+    }
+
 
 }

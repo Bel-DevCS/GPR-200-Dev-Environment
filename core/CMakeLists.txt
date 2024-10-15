@@ -21,6 +21,7 @@ add_library(core STATIC ${CORE_SRC} ${CORE_INC}
         Bella/texture.h
         Bella/definitionFunctions.h
         Bella/drawShape.h
+        Bella/definitionColours.h
 )
 
 find_package(OpenGL REQUIRED)
