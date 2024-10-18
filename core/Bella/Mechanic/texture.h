@@ -3,9 +3,9 @@
 //
 
 #pragma once
-#include "../ew/external/stb_image.h"
+#include "../../ew/external/stb_image.h"
 #include <string>
-#include "../ew/external/glad.h"
+#include "../../ew/external/glad.h"
 #include <iostream>
 
 namespace Bella_GPR200

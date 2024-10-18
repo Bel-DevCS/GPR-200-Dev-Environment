@@ -1,6 +1,6 @@
 #pragma once
-#include "../ew/external/glad.h"
-#include <glm/glm.hpp>
+#include "../../ew/external/glad.h"
+#include "glm/glm.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>

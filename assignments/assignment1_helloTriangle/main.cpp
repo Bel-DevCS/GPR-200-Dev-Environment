@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
-#include <Bella/shader.h>
+#include "Bella/Mechanic/shader.h"
 
 
 const int SCREEN_WIDTH = 1080;

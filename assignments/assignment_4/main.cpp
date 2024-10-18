@@ -1,19 +1,19 @@
 #include <ew/external/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 
-#include <Bella/shader.h>
-#include <Bella/definitionFunctions.h>
-#include <Bella/texture.h>
-#include <Bella/drawShape.h>
-#include <Bella/definitionColours.h>
-#include <Bella/camera.h>
+#include "Bella/Mechanic/shader.h"
+#include "Bella/Mechanic/texture.h"
+#include "Bella/Mechanic/camera.h"
+
+#include "Bella/Definitions/drawShape.h"
+#include "Bella/Definitions/definitionFunctions.h"
+#include "Bella/Definitions/definitionColours.h"
+
 
 
 const int SCREEN_WIDTH = 1080;
@@ -23,7 +23,6 @@ float deltaTime = 0.0f;  // Time between current frame and last frame
 float lastFrame = 0.0f;  // Time of the last frame
 
 int main() {
-
 
     //1 : Create Program Window
     #pragma region Initialize Window
@@ -41,8 +40,8 @@ int main() {
     }
 
     //1(c) : Create Window
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "3D Transforms and Triangles", NULL, NULL);
-    if (window == NULL) {
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "3D Transforms and Triangles", nullptr, nullptr);
+    if (window == nullptr) {
         printf("GLFW failed to create window");
         return 1;
     }
@@ -60,8 +59,8 @@ int main() {
 
 
     // 3 : Instantiate Shader and Load Textures
-    Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
-    Bella_GPR200::Texture2D aText("assets/Images/Example_Images/amythest.png");
+    Bella_GPR200::Shader ourShader("assets/Shaders/vertexShader.vert", "assets/Shaders/fragmentShader.frag");
+    Bella_GPR200::Texture2D aText("assets/Textures/amethyst.png");
 
     // 4 : Setup Cube Positions and Attributes
     unsigned int cubeVAO = Bella_GPR200::DrawShape::Cube();
@@ -77,7 +76,7 @@ int main() {
                 glm::vec3(1.3f, -2.0f, -2.5f),
                 glm::vec3(1.5f,  2.0f, -2.5f),
                 glm::vec3(1.5f,  0.2f, -1.5f),
-                glm::vec3(-1.3f,  1.0f, -1.5f)
+                glm::vec3(-1.3f,  1.0f, -1.5f),
             };
 
 
@@ -92,22 +91,25 @@ int main() {
                 15.0f,
                 45.0f,
                 60.0f,
-                10.0f
+                10.0f,
             };
 
 
-    glm::vec3 rotationAxes[] = {
-            glm::vec3(1.0f, 0.3f, 0.5f),
-            glm::vec3(0.5f, 1.0f, 0.3f),
-            glm::vec3(0.3f, 0.5f, 1.0f),
-            glm::vec3(1.0f, 0.7f, 0.2f),
-            glm::vec3(0.2f, 1.0f, 0.8f),
-            glm::vec3(0.6f, 0.4f, 1.0f),
-            glm::vec3(0.3f, 1.0f, 0.5f),
-            glm::vec3(1.0f, 0.6f, 0.3f),
-            glm::vec3(0.8f, 0.3f, 1.0f),
-            glm::vec3(1.0f, 0.2f, 0.7f)
-    };
+    glm::vec3 rotationAxes[] =
+            {
+               /* glm::vec3(1.0f, 0.3f, 0.5f),
+                glm::vec3(0.5f, 1.0f, 0.3f),
+                glm::vec3(0.3f, 0.5f, 1.0f),
+                glm::vec3(1.0f, 0.7f, 0.2f),
+                glm::vec3(0.2f, 1.0f, 0.8f),
+                glm::vec3(0.6f, 0.4f, 1.0f),
+                glm::vec3(0.3f, 1.0f, 0.5f),
+                glm::vec3(1.0f, 0.6f, 0.3f),
+                glm::vec3(0.8f, 0.3f, 1.0f),
+                glm::vec3(1.0f, 0.2f, 0.7f), */
+
+                glm::vec3(rand(), rand(), rand())
+            };
 
     float scales[] =
             {
@@ -183,10 +185,10 @@ int main() {
         ourShader.setMat4("projection", projection);
 
 
-        // Set time uniform
+        // 6(e) Set time uniform
         ourShader.setFloat("uTime", currentFrame);
 
-        // 6(e) : Draw Each Cube
+        // 6(f) : Draw Each Cube
         glBindVertexArray(cubeVAO);
         for (unsigned int i = 0; i < 10; i++)
         {
@@ -200,11 +202,11 @@ int main() {
             ourShader.setVec4("cubeColour", cubeColours[i]);
             ourShader.setFloat("uOscillationOffset", i * 0.5f);
 
-            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+            glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
         }
 
 
-        // 6(f) : Swap Buffers and Poll Events
+        // 6(g) : Swap Buffers and Poll Events
         glfwSwapBuffers(window);
         glfwPollEvents();
 

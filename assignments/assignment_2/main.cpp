@@ -7,8 +7,8 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
-#include <Bella/shader.h>
-#include <Bella/texture.h>
+#include "Bella/Mechanic/shader.h"
+#include "Bella/Mechanic/texture.h"
 
 #include <EW/external/stb_image.h>
 
@@ -56,12 +56,12 @@ int main() {
             "assets/Shaders/Character Shader/Character_FragmentShader.frag");
 
     // 3: Instantiate textures
-    Bella_GPR200::Texture2D BGTexture("assets/Images/AssignmentImages/BackgroundImages/BG.jpg",
+    Bella_GPR200::Texture2D BGTexture("assets/Textures/AssignmentImages/BackgroundImages/BG.jpg",
                                       GL_TEXTURE_MIN_FILTER,
                                       GL_NEAREST);
-    Bella_GPR200::Texture2D characterTexture("assets/Images/AssignmentImages/CharacterImages/Character.png");
+    Bella_GPR200::Texture2D characterTexture("assets/Textures/AssignmentImages/CharacterImages/Character.png");
 
-    Bella_GPR200::Texture2D BG_Smile("assets/Images/Example_Images/awesomeface.png");
+    Bella_GPR200::Texture2D BG_Smile("assets/Textures/Textures/awesomeface.png");
 
     float vertices[] = {
             // Positions        Colors           Texture Coords

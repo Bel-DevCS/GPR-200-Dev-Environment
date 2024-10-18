@@ -15,7 +15,7 @@ void main()
 {
     //Colour Animation
     float speed = 1.0;
-    float intensity = 0.5;
+    float intensity = 0.1;
     float oscillation = sin(uTime * speed + uOscillationOffset) * intensity + 0.5;
 
 

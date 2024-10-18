@@ -16,13 +16,13 @@ set(CORE_INC_DIR
 )
 
 add_library(core STATIC ${CORE_SRC} ${CORE_INC}
-        Bella/shader.h
-        Bella/shader.cpp
-        Bella/texture.h
-        Bella/definitionFunctions.h
-        Bella/drawShape.h
-        Bella/definitionColours.h
-        Bella/camera.h
+        Bella/Mechanic/shader.h
+        Bella/Mechanic/shader.cpp
+        Bella/Mechanic/texture.h
+        Bella/Definitions/definitionFunctions.h
+        Bella/Definitions/drawShape.h
+        Bella/Definitions/definitionColours.h
+        Bella/Mechanic/camera.h
 )
 
 find_package(OpenGL REQUIRED)
