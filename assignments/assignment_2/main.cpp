@@ -61,7 +61,7 @@ int main() {
                                       GL_NEAREST);
     Bella_GPR200::Texture2D characterTexture("assets/Textures/AssignmentImages/CharacterImages/Character.png");
 
-    Bella_GPR200::Texture2D BG_Smile("assets/Textures/Textures/awesomeface.png");
+    Bella_GPR200::Texture2D BG_Smile("assets/Textures/ExampleImages/awesomeface.png");
 
     float vertices[] = {
             // Positions        Colors           Texture Coords

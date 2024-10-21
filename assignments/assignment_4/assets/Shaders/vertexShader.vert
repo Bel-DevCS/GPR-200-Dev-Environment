@@ -8,19 +8,20 @@ layout (location = 2) in vec2 aTexCoord;
 out vec4 Colour;
 out vec2 TexCoord;
 
-//uniform mat4 uTransform;  // Transformation matrix from C++ code
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
+uniform float uTime;
+uniform float uBounce;
 void main()
 {
-    Colour = aColour; // Pass-through
+    Colour = aColour;
     TexCoord = aTexCoord;
 
-    // Apply transformation to the vertex position
-    //gl_Position = uTransform * vec4(aPos, 1.0);
+    vec3 animatedPos = aPos;
+    animatedPos.y += sin(uTime + aPos.x * 0.5) * uBounce;
 
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
+    gl_Position = projection * view * model * vec4(animatedPos, 1.0);
 }
