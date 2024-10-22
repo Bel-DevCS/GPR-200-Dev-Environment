@@ -34,6 +34,7 @@ float lastX = SCREEN_WIDTH / 2.0f;
 float lastY = SCREEN_HEIGHT / 2.0f;
 bool firstMouse = true;
 bool isPerspective = true;
+bool isMouseLocked = true;
 
 
 //Callback functions
@@ -150,17 +151,26 @@ int main() {
             isPerspective = !isPerspective;  // Toggle projection mode
             spacePressed = true;
         }
-        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+        {
             spacePressed = false;
         }
 
-        // 6(e) : Update Projection Matrix
+        // 6(e) : Lock and Unlock Mouse
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+        {
+            isMouseLocked = !isMouseLocked;
+            glfwSetInputMode(window, GLFW_CURSOR, isMouseLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+            glfwWaitEventsTimeout(0.2);
+        }
+
+        // 6(f) : Update Projection Matrix
         projection = isPerspective
                      ? glm::perspective(glm::radians(cam.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 1000.0f)
                      : glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
 
 
-        // 6(f) : Use Shader, Set Matrices
+        // 6(g) : Use Shader, Set Matrices
         aText.Bind(0);
         ourShader.use();
 
@@ -169,11 +179,11 @@ int main() {
         ourShader.setMat4("projection", projection);
 
 
-        // 6(g) Set time uniform
+        // 6(h) Set time uniform
         ourShader.setFloat("uTime", currentFrame);
         ourShader.setFloat("uBounce", bounce);
 
-        // 6(h) : Draw Each Cube
+        // 6(i) : Draw Each Cube
         glBindVertexArray(cubeVAO);
         for (unsigned int i = 0; i < numCubes; i++)
         {
@@ -191,7 +201,7 @@ int main() {
         }
 
 
-        // 6(i) : Swap Buffers and Poll Events
+        // 6(j) : Swap Buffers and Poll Events
         glfwSwapBuffers(window);
         glfwPollEvents();
 
@@ -212,7 +222,8 @@ void scroll_callback(GLFWwindow* window, double x_offset, double y_offset)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    if (firstMouse) {
+    if (firstMouse)
+    {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
@@ -223,6 +234,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     lastX = xpos;
     lastY = ypos;
 
-    // Update camera angles based on mouse movement
-    cam.MouseInput(xoffset, yoffset);
+    if (isMouseLocked)
+    {
+        cam.MouseInput(xoffset, yoffset);
+    }
 }
