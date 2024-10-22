@@ -29,13 +29,19 @@ int numCubes = 20;
 //Global Camera object to handle inputs later
 Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
-//Scroll callback prototype
+//Global Camera Variables
+float lastX = SCREEN_WIDTH / 2.0f;
+float lastY = SCREEN_HEIGHT / 2.0f;
+bool firstMouse = true;
+bool isPerspective = true;
+
+
+//Callback functions
 //! : potentially add to camera class?
 void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 float bounce = 0.5;
-
-bool isPerspective = true;
 
 int main() {
 
@@ -65,8 +71,10 @@ int main() {
         return 1;
     }
 
-    //1(d) : Register Zoom Callback
+    //1(d) : Register Callbacks
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
     //! : potentially set as global Variables?
@@ -200,4 +208,21 @@ int main() {
 void scroll_callback(GLFWwindow* window, double x_offset, double y_offset)
 {
     cam.ScrollInput(static_cast<float>(y_offset));
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    // Update camera angles based on mouse movement
+    cam.MouseInput(xoffset, yoffset);
 }
