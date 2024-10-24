@@ -7,7 +7,9 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
+#include "Bella/Definitions/drawShape.h"
 #include "Bella/Mechanic/shader.h"
+#include "Bella/Mechanic/Model/mesh.h"
 
 
 const int SCREEN_WIDTH = 1080;
@@ -47,34 +49,21 @@ int main() {
     //2 : Instantiate Shader
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
 
-    //3 : Create Shape
-    float vertices[] =
-            {
-                    //X     Y     Z         R     G     B      A
-                    -0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,
-                    0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f, 1.0f,
-                    0.0f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f, 1.0f
-            };
+    //Mesh Testing
 
-    //4 : Instantiate Vertex Array Object, and Vertex Buffer Object
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    std::vector<Bella_GPR200::Vertex> vertices =
+        {
+            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // Bottom left
+            {{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}}, // Bottom right
+            {{0.0f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}} // Top center
+        };
 
-    //5 : Bind Vertex Array Object
-    glBindVertexArray(VAO);
+    std::vector<unsigned int> indices = {0, 1, 2};
+    std::vector<Bella_GPR200::Texture> textures;
 
-    //6 : Bind Vertex Array Object
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    //4 : Create a simple Mesh
+    Bella_GPR200::Mesh simpleMesh(vertices, indices, textures);
 
-    //7 : Attribute Pointer for Position (X,Y,Z)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    //8 : Attribute Pointer for Colour (R,G,B,A)
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
 
     //9 : Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -89,10 +78,7 @@ int main() {
 
         //9(c) : Use Shader and Bind Vertex Array to Shader
         ourShader.use();
-        glBindVertexArray(VAO);
-
-        //9(d) : Draw Call
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        simpleMesh.Draw(ourShader);
 
 
         //9(e) : Swap Buffers
