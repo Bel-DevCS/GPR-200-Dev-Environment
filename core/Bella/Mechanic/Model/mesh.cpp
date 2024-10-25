@@ -12,6 +12,12 @@ namespace Bella_GPR200
         setupMesh();
     }
 
+    void Mesh::setMaterialColor(const glm::vec3& color)
+    {
+        materialColor = color;
+        useMaterialColor = true; // Set the flag to use material color
+    }
+
     void Mesh::setupMesh()
     {
         glGenVertexArrays(1, &VAO);
@@ -42,28 +48,44 @@ namespace Bella_GPR200
 
     void Mesh::Draw(Shader& shader)
     {
+        // Bind appropriate textures if they exist
         unsigned int diffuseNr = 1;
         unsigned int specularNr = 1;
-        for(unsigned int i = 0; i < textures.size(); i++)
+
+        for (unsigned int i = 0; i < textures.size(); i++)
         {
-            glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
-            // retrieve texture number (the N in diffuse_textureN)
+            glActiveTexture(GL_TEXTURE0 + i); // Activate proper texture unit before binding
+
             std::string number;
             std::string name = textures[i].type;
-            if(name == "texture_diffuse")
+            if (name == "texture_diffuse")
                 number = std::to_string(diffuseNr++);
-            else if(name == "texture_specular")
+            else if (name == "texture_specular")
                 number = std::to_string(specularNr++);
 
-            shader.setInt(("material." + name + number).c_str(), i);
+            // Set the sampler to the corresponding texture unit
+            shader.setInt((name + number).c_str(), i);
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
-        glActiveTexture(GL_TEXTURE0);
 
-        // draw mesh
+        // Set the material color if no textures are available or if explicitly set
+        if (useMaterialColor || textures.empty())
+        {
+            shader.setVec3("materialColor", materialColor);
+            shader.setInt("useMaterialColor", 1);
+        }
+        else
+        {
+            shader.setInt("useMaterialColor", 0);
+        }
+
+        // Draw the mesh
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+
+        // Set back to default
+        glActiveTexture(GL_TEXTURE0);
     }
 
 

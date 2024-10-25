@@ -10,9 +10,35 @@ namespace Bella_GPR200
 {
     void Model::Draw(Shader& shader)
     {
-        for(unsigned int i = 0; i < meshes.size(); i++)
+        for (unsigned int i = 0; i < meshes.size(); i++)
+        {
+            // Check if the mesh has textures
+            if (meshes[i].textures.empty())
+            {
+                // If no textures, use material color
+                shader.setBool("useTexture", false);
+                // Set a default material color for now
+                shader.setVec3("materialColor", glm::vec3(0.5f, 0.5f, 0.5f)); // Example color
+            }
+            else
+            {
+                // If textures are present, use them
+                shader.setBool("useTexture", true);
+                for (unsigned int j = 0; j < meshes[i].textures.size(); j++)
+                {
+                    std::string number;
+                    std::string name = meshes[i].textures[j].type;
+                    if (name == "texture_diffuse")
+                        number = "1";  // Assuming one diffuse texture for now
+                    shader.setInt((name + number).c_str(), j);
+                    glActiveTexture(GL_TEXTURE0 + j); // Activate texture unit
+                    glBindTexture(GL_TEXTURE_2D, meshes[i].textures[j].id);
+                }
+            }
             meshes[i].Draw(shader);
+        }
     }
+
 
     void Model::loadModel(std::string path)
     {
@@ -44,68 +70,94 @@ namespace Bella_GPR200
         }
     }
 
-    Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
+   Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
+{
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> indices;
+    std::vector<Texture> textures;
+    glm::vec3 materialColor = glm::vec3(0.5f, 0.5f, 0.5f); // Default color
+
+    // Process vertices
+    for (unsigned int i = 0; i < mesh->mNumVertices; i++)
     {
-        std::vector<Vertex> vertices;
-        std::vector<unsigned int> indices;
-        std::vector<Texture> textures;
+        Vertex vertex;
+        glm::vec3 vector;
 
-        for(unsigned int i = 0; i < mesh->mNumVertices; i++)
+        // Positions
+        vector.x = mesh->mVertices[i].x;
+        vector.y = mesh->mVertices[i].y;
+        vector.z = mesh->mVertices[i].z;
+        vertex.Position = vector;
+
+        // Normals
+        if (mesh->mNormals)
         {
-            Vertex vertex;
-            // process vertex positions, normals and texture coordinates
-            glm::vec3 vector;
-            vector.x = mesh->mVertices[i].x;
-            vector.y = mesh->mVertices[i].y;
-            vector.z = mesh->mVertices[i].z;
-            vertex.Position = vector;
-
             vector.x = mesh->mNormals[i].x;
             vector.y = mesh->mNormals[i].y;
             vector.z = mesh->mNormals[i].z;
             vertex.Normal = vector;
-
-            if(mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
-            {
-                glm::vec2 vec;
-                vec.x = mesh->mTextureCoords[0][i].x;
-                vec.y = mesh->mTextureCoords[0][i].y;
-                vertex.TexCoords = vec;
-            }
-            else
-                vertex.TexCoords = glm::vec2(0.0f, 0.0f);
-
-
-            vertices.push_back(vertex);
         }
-        // process indices
-        for(unsigned int i = 0; i < mesh->mNumFaces; i++)
+
+        // Texture Coordinates
+        if (mesh->mTextureCoords[0])
         {
-            aiFace face = mesh->mFaces[i];
-            for(unsigned int j = 0; j < face.mNumIndices; j++)
-                indices.push_back(face.mIndices[j]);
+            glm::vec2 vec;
+            vec.x = mesh->mTextureCoords[0][i].x;
+            vec.y = mesh->mTextureCoords[0][i].y;
+            vertex.TexCoords = vec;
         }
-        // process material
-        if(mesh->mMaterialIndex >= 0)
+        else
         {
-            if(mesh->mMaterialIndex >= 0)
-            {
-                aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-
-                std::vector<Texture> diffuseMaps = loadMaterialTextures
-                (material, aiTextureType_DIFFUSE, "texture_diffuse");
-
-                textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-                std::vector<Texture> specularMaps = loadMaterialTextures
-                (material, aiTextureType_SPECULAR, "texture_specular");
-
-                textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-            }
+            vertex.TexCoords = glm::vec2(0.0f, 0.0f);
         }
 
-        return Mesh(vertices, indices, textures);
+        vertices.push_back(vertex);
     }
+
+    // Process indices
+    for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+    {
+        aiFace face = mesh->mFaces[i];
+        for (unsigned int j = 0; j < face.mNumIndices; j++)
+            indices.push_back(face.mIndices[j]);
+    }
+
+    // Process materials
+    if (mesh->mMaterialIndex >= 0)
+    {
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+
+        // Load diffuse textures
+        std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+        // Load specular textures
+        std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+        // If no diffuse textures, try to load the material color
+        if (diffuseMaps.empty())
+        {
+            aiColor3D color(0.5f, 0.5f, 0.5f); // Default color
+            if (AI_SUCCESS == material->Get(AI_MATKEY_COLOR_DIFFUSE, color))
+            {
+                materialColor = glm::vec3(color.r, color.g, color.b);
+            }
+        }
+    }
+
+    // Create mesh with vertices, indices, and textures
+    Mesh meshResult(vertices, indices, textures);
+
+    // Set the material color for the mesh if no textures
+    if (textures.empty())
+    {
+        meshResult.setMaterialColor(materialColor);
+    }
+
+    return meshResult;
+}
+
 
     std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
     {

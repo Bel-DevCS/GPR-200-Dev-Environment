@@ -88,7 +88,7 @@ int main() {
     //4 : Create a simple Mesh
     Bella_GPR200::Mesh simpleMesh(vertices, indices, textures);
 
-    Bella_GPR200::Model testModel("assets/Models/Plant.fbx");
+    Bella_GPR200::Model testModel("assets/Models/plant.fbx");
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 

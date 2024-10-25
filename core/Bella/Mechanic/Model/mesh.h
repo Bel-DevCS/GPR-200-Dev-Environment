@@ -32,9 +32,14 @@ namespace Bella_GPR200
         Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
         void Draw(Shader &shader);
 
+        void setMaterialColor(const glm::vec3& color);
+
         private:
 
          unsigned int VAO, VBO, EBO;
+
+        glm::vec3 materialColor;
+        bool useMaterialColor = false;
 
          void setupMesh();
 
