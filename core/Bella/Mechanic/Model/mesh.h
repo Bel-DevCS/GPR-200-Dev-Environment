@@ -19,6 +19,7 @@ namespace Bella_GPR200
     {
         unsigned int id;
         std::string type;
+        std::string path;
     };
 
     class Mesh

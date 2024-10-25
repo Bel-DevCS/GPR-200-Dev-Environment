@@ -10,10 +10,32 @@
 #include "Bella/Definitions/drawShape.h"
 #include "Bella/Mechanic/shader.h"
 #include "Bella/Mechanic/Model/mesh.h"
+#include "Bella/Mechanic/Model/model.h"
+#include "Bella/Mechanic/camera.h"
 
 
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
+
+float deltaTime = 0.0f;  // Time between current frame and last frame
+float lastFrame = 0.0f;  // Time of the last frame
+Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
+
+void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+
+void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime)
+{
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
+}
+
 
 
 int main() {
@@ -34,7 +56,7 @@ int main() {
     }
 
     //1(c) : Create Window
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello Triangle", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models", NULL, NULL);
     if (window == NULL) {
         printf("GLFW failed to create window");
         return 1;
@@ -48,6 +70,8 @@ int main() {
 
     //2 : Instantiate Shader
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
+
+    Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
 
     //Mesh Testing
 
@@ -64,28 +88,51 @@ int main() {
     //4 : Create a simple Mesh
     Bella_GPR200::Mesh simpleMesh(vertices, indices, textures);
 
+    Bella_GPR200::Model testModel("assets/Models/Plant.fbx");
+    // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
 
     //9 : Render Loop
+    // Render Loop
     while (!glfwWindowShouldClose(window)) {
 
-        //9(a) : Clear the Screen
-        glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        // Calculate delta time
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
-        //9(b) : Instantiate Shader Uniforms
-        float timeValue = glfwGetTime();
-        ourShader.setFloat("uTime", timeValue);
-
-        //9(c) : Use Shader and Bind Vertex Array to Shader
-        ourShader.use();
-        simpleMesh.Draw(ourShader);
+        // Process input
+        processInput(window, cam, deltaTime);
 
 
-        //9(e) : Swap Buffers
+
+        // Clear color and depth buffers
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // Update projection and view matrices
+        glm::mat4 projection = glm::perspective(glm::radians(cam.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = cam.GetViewMatrix();
+
+        // Set shader uniforms
+        genModelShader.use();
+        genModelShader.setMat4("projection", projection);
+        genModelShader.setMat4("view", view);
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+        genModelShader.setMat4("model", model);
+
+        // Draw the model
+        testModel.Draw(genModelShader);
+
+        // Swap buffers and poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
-
     }
+
 
     //10 : Terminate Program
     printf("Shutting down...");
