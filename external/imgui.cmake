@@ -2,8 +2,7 @@
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(
         NAME IMGUI
-        GIT_REPOSITORY "https://github.com/ocornut/imgui.git"
-        GIT_TAG "docking"  # Use the docking branch
+        URL "https://github.com/ocornut/imgui/archive/refs/tags/v1.89.2.zip"
 )
 IF(IMGUI_ADDED)
     add_library(IMGUI STATIC)

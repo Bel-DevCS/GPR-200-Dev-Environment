@@ -2,9 +2,9 @@
 string(TIMESTAMP BEFORE "%s")
 
 CPMAddPackage(
-	NAME "assimp"
-	URL "https://github.com/assimp/assimp/archive/refs/tags/v5.2.5.zip"
-	OPTIONS (
+		NAME "assimp"
+		URL "https://github.com/assimp/assimp/archive/refs/tags/v5.2.5.zip"
+		OPTIONS (
 		"ASSIMP_BUILD_SAMPLES OFF" "ASSIMP_BUILD_ZLIB ON" "BUILD_SHARED_LIBS OFF"
 		"ASSIMP_BUILD_TESTS OFF"
 		"ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF"
@@ -14,7 +14,7 @@ CPMAddPackage(
 		"ASSIMP_BUILD_COLLADA_IMPORTER ON"
 
 		"ASSIMP_WARNINGS_AS_ERRORS OFF" #modified to prevent warnings from stopping program execution
-	)
+)
 )
 
 find_package(assimp REQUIRED)

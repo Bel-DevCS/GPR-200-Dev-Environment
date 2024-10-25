@@ -23,12 +23,6 @@ add_library(core STATIC ${CORE_SRC} ${CORE_INC}
         Bella/Definitions/drawShape.h
         Bella/Definitions/definitionColours.h
         Bella/Mechanic/camera.h
-        Bella/Mechanic/Model/mesh.cpp
-        Bella/Mechanic/Model/mesh.h
-        Bella/Mechanic/Model/model.cpp
-        Bella/Mechanic/Model/model.h
-        Bella/Mechanic/light.cpp
-        Bella/Mechanic/light.h
 )
 
 find_package(OpenGL REQUIRED)
