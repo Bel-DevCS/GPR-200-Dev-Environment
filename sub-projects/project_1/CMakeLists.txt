@@ -17,8 +17,8 @@ ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/assets/)
 install(FILES ${PROJECT1_INC} DESTINATION include/project1)
 project(project1)
 add_executable(project1 ${PROJECT1_SRC} ${PROJECT1_INC})
-target_link_libraries(project1 PUBLIC core IMGUI glm)
-target_include_directories(project1 PUBLIC ${CORE_INC_DIR} ${stb_INCLUDE_DIR})
+target_link_libraries(project1 PUBLIC core IMGUI glm assimp)
+target_include_directories(project1 PUBLIC ${CORE_INC_DIR} ${stb_INCLUDE_DIR} ${assimp_INCLUDE_DIRS})
 
 #Trigger asset copy when assignment1 is built
 add_dependencies(project1 copyAssetsP1)

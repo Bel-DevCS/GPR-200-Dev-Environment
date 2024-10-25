@@ -13,12 +13,23 @@ CPMAddPackage(
 		"ASSIMP_BUILD_OBJ_IMPORTER ON"
 		"ASSIMP_BUILD_COLLADA_IMPORTER ON"
 
+		"ASSIMP_WARNINGS_AS_ERRORS OFF" #modified to prevent warnings from stopping program execution
 	)
 )
 
 find_package(assimp REQUIRED)
-set (assimp_INCLUDE_DIR ${assimp_SOURCE_DIR}/include)
-include_directories(${assimp_INCLUDE_DIR})
+set(assimp_INCLUDE_DIRS
+		"${assimp_SOURCE_DIR}/include"
+		"${assimp_BINARY_DIR}/include" #modified to fix
+)
+
+include_directories(
+		"${assimp_SOURCE_DIR}/include"
+		"${assimp_BINARY_DIR}/include" #modified to fix
+)
+
+link_directories(${assimp_BINARY_DIR}/lib)
+
 string(TIMESTAMP AFTER "%s")
 math(EXPR DELTAassimp "${AFTER}-${BEFORE}")
 MESSAGE(STATUS "assimp TIME: ${DELTAassimp}s")
