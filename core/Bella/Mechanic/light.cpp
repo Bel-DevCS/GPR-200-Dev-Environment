@@ -14,6 +14,11 @@ namespace Bella_GPR200
 
         void Light::SetLightUniforms(Shader& shader)
         {
+            shader.setFloat("AmbientK", AmbientK);
+            shader.setFloat("DiffuseK", DiffuseK);
+            shader.setFloat("SpecularK", SpecularK);
+            shader.setFloat("Shininess", Shininess);
+
             switch(type)
             {
                 case LightType::DIRECTIONAL:

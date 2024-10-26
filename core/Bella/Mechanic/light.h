@@ -32,6 +32,10 @@ namespace Bella_GPR200
 
             void SetLightUniforms(Shader& shader);
             void SetLightingModel(LightingModel model) { this->model = model; }
+            void SetAmbientK(float k) { AmbientK = k; }
+            void SetDiffuseK(float k) { DiffuseK = k; }
+            void SetSpecularK(float k) { SpecularK = k; }
+            void SetShininess(float s) { Shininess = s; }
 
         private:
             LightType type;
@@ -41,6 +45,11 @@ namespace Bella_GPR200
             glm::vec3 colour;
 
             float intensity;
+
+            float AmbientK = 0.1f;
+            float DiffuseK = 0.5f;
+            float SpecularK = 1.0f;
+            float Shininess = 32.0f;
 
         };
     }

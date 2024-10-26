@@ -14,39 +14,22 @@
 #include "Bella/Mechanic/camera.h"
 #include "Bella/Mechanic/light.h"
 
-
+//Global Variables
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
-
 float deltaTime = 0.0f;  // Time between current frame and last frame
 float lastFrame = 0.0f;  // Time of the last frame
-Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
+
+//Input Functions
 void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-
-void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime)
-{
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
-}
-
-int pixelSize = 200;
-
-
-Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, 1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
-
+void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime);
 
 
 int main() {
 
-    //1 : Create Program Window
+    //Create Program Window
     #pragma region Initialize Window
     printf("Initializing...");
 
@@ -74,39 +57,30 @@ int main() {
     }
 #pragma endregion
 
-    //2 : Instantiate Shader
-    Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
+    //Camera
+    Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
+    //Lighting
+    Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, 1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
+    directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::BLINN_PHONG);
+
+    //Shaders
+    Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
     Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
     Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
 
-    //Mesh Testing
 
-    std::vector<Bella_GPR200::Vertex> vertices =
-        {
-            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 0.0f}}, // Bottom left
-            {{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f}}, // Bottom right
-            {{0.0f, 0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {0.5f, 1.0f}} // Top center
-        };
-
-    std::vector<unsigned int> indices = {0, 1, 2};
-    std::vector<Bella_GPR200::Texture> textures;
-
-    //4 : Create a simple Mesh
-    Bella_GPR200::Mesh simpleMesh(vertices, indices, textures);
-
+    //Model
     Bella_GPR200::Model testModel("assets/Models/plant.fbx");
-    // Enable depth testing
+
+    //OpenGL Settings
     glEnable(GL_DEPTH_TEST);
 
 
-    directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::BLINN_PHONG);
-
-    //9 : Render Loop
-    // Render Loop
+    //Render Loop
     while (!glfwWindowShouldClose(window)) {
 
-        // Calculate delta time
+        //Time Calculations
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
@@ -114,27 +88,30 @@ int main() {
         // Process input
         processInput(window, cam, deltaTime);
 
-
-
         // Clear color and depth buffers
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //Shader Instantiation
+        genModelShader.use();
+
         // Update projection and view matrices
         glm::mat4 projection = glm::perspective(glm::radians(cam.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = cam.GetViewMatrix();
-
-        // Set shader uniforms
-        genModelShader.use();
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
 
+
+        //Lighting Instantiation
         directionalLight.SetLightUniforms(genModelShader);
 
+
+        //Model Transformation
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         genModelShader.setMat4("model", model);
+
         // Draw the model
         testModel.Draw(genModelShader);
 
@@ -148,4 +125,17 @@ int main() {
     printf("Shutting down...");
     glfwTerminate();
 
+}
+
+
+void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime)
+{
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::FORWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::BACKWARD, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::LEFT, deltaTime);
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
 }
