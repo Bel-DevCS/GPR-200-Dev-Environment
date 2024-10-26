@@ -36,6 +36,15 @@ namespace Bella_GPR200
             void SetDiffuseK(float k) { DiffuseK = k; }
             void SetSpecularK(float k) { SpecularK = k; }
             void SetShininess(float s) { Shininess = s; }
+            void SetColour(glm::vec3 c) { colour = c; }
+
+            float GetAmbientK() { return AmbientK; }
+            float GetDiffuseK() { return DiffuseK;}
+            float GetSpecularK() { return SpecularK; }
+            float GetShininess() { return Shininess; }
+
+            glm::vec3 GetColor() const {return colour;}
+
 
         private:
             LightType type;

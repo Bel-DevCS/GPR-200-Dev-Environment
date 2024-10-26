@@ -24,62 +24,26 @@ const int SCREEN_HEIGHT = 720;
 float deltaTime = 0.0f;  // Time between current frame and last frame
 float lastFrame = 0.0f;  // Time of the last frame
 
+//Window Functions
+GLFWwindow* InitializeWindow();
+void InitImGui(GLFWwindow* window);
 
 //Input Functions
 void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime);
 
-
 int main() {
 
-    //Create Program Window
-    #pragma region Initialize Window
-    printf("Initializing...");
-
-    //1(a) : Ensure Core Profile is Correct
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    //1(b) : Check if GLFW fails to Initiate
-    if (!glfwInit()) {
-        printf("GLFW failed to init!");
-        return 1;
-    }
-
-    //1(c) : Create Window
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models", NULL, NULL);
-    if (window == NULL) {
-        printf("GLFW failed to create window");
-        return 1;
-    }
-    glfwMakeContextCurrent(window);
-    if (!gladLoadGL(glfwGetProcAddress)) {
-        printf("GLAD Failed to load GL headers");
-        return 1;
-    }
-#pragma endregion
-
-
-    // Initialize ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); // Input/Output interface
-
-    // ImGui backend initialization
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
-    ImGui::StyleColorsDark();
-
+    GLFWwindow* window = InitializeWindow();
+    InitImGui(window);
 
     //Camera
     Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
     //Lighting
     Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, 1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
-    directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::BLINN_PHONG);
+    directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::PHONG);
 
     //Shaders
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
@@ -93,7 +57,6 @@ int main() {
     //OpenGL Settings
     glEnable(GL_DEPTH_TEST);
 
-
     //Render Loop
     while (!glfwWindowShouldClose(window)) {
 
@@ -102,10 +65,43 @@ int main() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // Draw your ImGui UI
-        ImGui::Begin("This is a plant");
-        ImGui::Text("You have found a plant! Nice!");
+        // Create ImGui window
+        ImGui::Begin("Light Settings");
+
+        // Retrieve current K values from the light
+        float ambientK = directionalLight.GetAmbientK();
+        float diffuseK = directionalLight.GetDiffuseK();
+        float specularK = directionalLight.GetSpecularK();
+        float shininess = directionalLight.GetShininess();
+
+        // ImGui sliders for K values
+        ImGui::Text("K Values");
+        ImGui::Separator();
+
+        if (ImGui::SliderFloat("Ambient K", &ambientK, 0.0f, 1.0f)) {directionalLight.SetAmbientK(ambientK);}
+
+        if (ImGui::SliderFloat("Diffuse K", &diffuseK, 0.0f, 1.0f)) {directionalLight.SetDiffuseK(diffuseK);}
+
+        if (ImGui::SliderFloat("Specular K", &specularK, 0.0f, 1.0f)) {directionalLight.SetSpecularK(specularK);}
+
+        if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 128.0f)) {directionalLight.SetShininess(shininess);}
+
+        ImGui::Spacing();
+        ImGui::Spacing();
+
+        ImGui::Text("Light Color");
+        ImGui::Separator();
+
+        float color[3] = {directionalLight.GetColor().r, directionalLight.GetColor().g, directionalLight.GetColor().b};
+        if (ImGui::ColorEdit3("Light Color", color))
+        {
+            directionalLight.SetColour(glm::vec3(color[0], color[1], color[2]));
+        }
+
+
         ImGui::End();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 
         //Time Calculations
@@ -162,6 +158,47 @@ int main() {
 
 }
 
+GLFWwindow* InitializeWindow()
+{
+    printf("Initializing...");
+    if (!glfwInit())
+    {
+        printf("GLFW failed to init!");
+        return nullptr;
+    }
+
+    // Set OpenGL context hints
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    // Create window
+    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models", nullptr, nullptr);
+    if (window == nullptr) {
+        printf("GLFW failed to create window");
+        glfwTerminate();
+        return nullptr;
+    }
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGL(glfwGetProcAddress)) {
+        printf("GLAD Failed to load GL headers");
+        glfwTerminate();
+        return nullptr;
+    }
+
+    return window;
+}
+
+void InitImGui(GLFWwindow* window)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330 core");
+}
 
 void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime)
 {
