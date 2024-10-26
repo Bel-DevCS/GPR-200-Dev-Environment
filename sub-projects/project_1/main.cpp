@@ -1,22 +1,14 @@
-#include <stdio.h>
-#include <math.h>
-
-#include <ew/external/glad.h>
-#include <ew/ewMath/ewMath.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 #include <iostream>
+#include "assets/Code/Scene Manager/SceneManager.h"
+#include "assets/Code/User Input/UserInput.h"
 
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 
 #include "Bella/Definitions/drawShape.h"
 #include "Bella/Mechanic/shader.h"
 #include "Bella/Mechanic/Model/mesh.h"
 #include "Bella/Mechanic/Model/model.h"
-#include "Bella/Mechanic/camera.h"
 #include "Bella/Mechanic/light.h"
+
 
 //Global Variables
 const int SCREEN_WIDTH = 1080;
@@ -24,19 +16,15 @@ const int SCREEN_HEIGHT = 720;
 float deltaTime = 0.0f;  // Time between current frame and last frame
 float lastFrame = 0.0f;  // Time of the last frame
 
-//Window Functions
-GLFWwindow* InitializeWindow();
-void InitImGui(GLFWwindow* window);
-
-//Input Functions
-void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
-void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime);
+//Managers
+SceneManager SM;
+UserInput UI;
 
 int main() {
 
-    GLFWwindow* window = InitializeWindow();
-    InitImGui(window);
+    GLFWwindow* window = SM.InitializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models");
+    if (!window) return -1;
+    SM.InitImGui(window);
 
     //Camera
     Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
@@ -110,7 +98,7 @@ int main() {
         lastFrame = currentFrame;
 
         // Process input
-        processInput(window, cam, deltaTime);
+        UI.processInput(window, cam, deltaTime);
 
         // Clear color and depth buffers
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -150,64 +138,6 @@ int main() {
 
 
     //10 : Terminate Program
-    printf("Shutting down...");
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwTerminate();
+    SM.Terminate(window);
 
-}
-
-GLFWwindow* InitializeWindow()
-{
-    printf("Initializing...");
-    if (!glfwInit())
-    {
-        printf("GLFW failed to init!");
-        return nullptr;
-    }
-
-    // Set OpenGL context hints
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // Create window
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models", nullptr, nullptr);
-    if (window == nullptr) {
-        printf("GLFW failed to create window");
-        glfwTerminate();
-        return nullptr;
-    }
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGL(glfwGetProcAddress)) {
-        printf("GLAD Failed to load GL headers");
-        glfwTerminate();
-        return nullptr;
-    }
-
-    return window;
-}
-
-void InitImGui(GLFWwindow* window)
-{
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330 core");
-}
-
-void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime)
-{
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
 }
