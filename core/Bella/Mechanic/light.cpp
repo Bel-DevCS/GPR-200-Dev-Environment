@@ -12,6 +12,19 @@ namespace Bella_GPR200
 
         Light::Light(glm::vec3 position, glm::vec3 color, float intensity, LightingModel model) : position(position), colour(color), intensity(intensity), type(LightType::POINT), model(model) {}
 
+
+        Light Light::CreateDirectional(const glm::vec3& direction, const glm::vec3& colour, LightingModel model)
+        {
+            return Light(direction, colour, model);
+        }
+
+        Light Light::CreatePoint(const glm::vec3& position, const glm::vec3& colour, float intensity, LightingModel model)
+        {
+            return Light(position, colour, intensity, model);
+        }
+
+
+
         void Light::SetLightUniforms(Shader& shader)
         {
             shader.setFloat("AmbientK", AmbientK);

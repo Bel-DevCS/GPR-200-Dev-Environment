@@ -31,8 +31,7 @@ int main() {
     Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
     //Set Up Lighting
-    Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, 1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
-    directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::PHONG);
+    Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
     //Initilize Shaders
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
@@ -69,8 +68,14 @@ int main() {
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
 
+        if (pointLight.GetType() == Bella_GPR200::Lighting::LightType::DIRECTIONAL) {
+            genModelShader.setInt("lightType", 0); // Directional light
+        } else {
+            genModelShader.setInt("lightType", 1); // Point light
+        }
+
         //Lighting Instantiation
-        directionalLight.SetLightUniforms(genModelShader);
+        pointLight.SetLightUniforms(genModelShader);
 
         //Model Transformation
         glm::mat4 model = glm::mat4(1.0f);
@@ -82,7 +87,7 @@ int main() {
         testModel.Draw(genModelShader);
 
         //Draw UI
-        SM.LightWindow(directionalLight);
+        SM.LightWindow(pointLight);
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);

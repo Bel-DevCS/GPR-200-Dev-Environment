@@ -93,6 +93,48 @@ void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
         light.SetColour(glm::vec3(color[0], color[1], color[2]));
     }
 
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    // Light position controls
+    switch (light.GetType())
+    {
+    case Bella_GPR200::Lighting::LightType::DIRECTIONAL:
+        {
+            ImGui::Text("Directional Light Settings");
+            ImGui::Separator();
+
+            // Direction Controls
+            glm::vec3 direction = light.GetDirection();
+            if (ImGui::DragFloat3("Direction", &direction[0], 0.1f, -1.0f, 1.0f))
+            {
+                light.SetDirection(direction);
+            }
+            break;
+        }
+
+    case Bella_GPR200::Lighting::LightType::POINT:
+        {
+            ImGui::Text("Point Light Settings");
+            ImGui::Separator();
+
+            // Position Controls
+            glm::vec3 position = light.GetPosition();
+            if (ImGui::DragFloat3("Position", &position[0], 0.1f, -10.0f, 10.0f))
+            {
+                light.SetPosition(position);
+            }
+
+            // Intensity Control
+            float intensity = light.GetIntensity();
+            if (ImGui::SliderFloat("Intensity", &intensity, 0.0f, 10.0f))
+            {
+                light.SetIntensity(intensity);
+            }
+            break;
+        }
+    }
+
     ImGui::End();
 
     // Render the ImGui frame
