@@ -12,6 +12,7 @@
 #include "Bella/Mechanic/Model/mesh.h"
 #include "Bella/Mechanic/Model/model.h"
 #include "Bella/Mechanic/camera.h"
+#include "Bella/Mechanic/light.h"
 
 
 const int SCREEN_WIDTH = 1080;
@@ -41,6 +42,7 @@ int pixelSize = 200;
 glm::vec3 lightDir = glm::vec3(-0.2f, -1.0f, -0.3f); // Example direction
 glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);  // White light
 
+Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 
 
@@ -126,8 +128,8 @@ int main() {
         genModelShader.use();
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
-        genModelShader.setVec3("lightDir", lightDir);
-        genModelShader.setVec3("lightColor", lightColor);
+
+        directionalLight.SetLightUniforms(genModelShader);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));

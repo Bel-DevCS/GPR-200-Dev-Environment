@@ -27,6 +27,8 @@ add_library(core STATIC ${CORE_SRC} ${CORE_INC}
         Bella/Mechanic/Model/mesh.h
         Bella/Mechanic/Model/model.cpp
         Bella/Mechanic/Model/model.h
+        Bella/Mechanic/light.cpp
+        Bella/Mechanic/light.h
 )
 
 find_package(OpenGL REQUIRED)
