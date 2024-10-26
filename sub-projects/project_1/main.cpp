@@ -7,6 +7,10 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
+
 #include "Bella/Definitions/drawShape.h"
 #include "Bella/Mechanic/shader.h"
 #include "Bella/Mechanic/Model/mesh.h"
@@ -57,6 +61,19 @@ int main() {
     }
 #pragma endregion
 
+
+    // Initialize ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); // Input/Output interface
+
+    // ImGui backend initialization
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
+    ImGui::StyleColorsDark();
+
+
     //Camera
     Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -79,6 +96,17 @@ int main() {
 
     //Render Loop
     while (!glfwWindowShouldClose(window)) {
+
+        // Start new ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Draw your ImGui UI
+        ImGui::Begin("This is a plant");
+        ImGui::Text("You have found a plant! Nice!");
+        ImGui::End();
+
 
         //Time Calculations
         float currentFrame = glfwGetTime();
@@ -115,6 +143,10 @@ int main() {
         // Draw the model
         testModel.Draw(genModelShader);
 
+        // ImGui rendering
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         // Swap buffers and poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -123,6 +155,9 @@ int main() {
 
     //10 : Terminate Program
     printf("Shutting down...");
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     glfwTerminate();
 
 }
