@@ -39,10 +39,8 @@ void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaT
 
 int pixelSize = 200;
 
-glm::vec3 lightDir = glm::vec3(-0.2f, -1.0f, -0.3f); // Example direction
-glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);  // White light
 
-Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
+Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, 1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
 
 
 
@@ -101,6 +99,8 @@ int main() {
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
+
+    directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::BLINN_PHONG);
 
     //9 : Render Loop
     // Render Loop
