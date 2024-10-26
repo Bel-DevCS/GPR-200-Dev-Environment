@@ -22,24 +22,24 @@ UserInput UI;
 
 int main() {
 
+    //Create OpenGL Window and ImGui window
     GLFWwindow* window = SM.InitializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models");
     if (!window) return -1;
     SM.InitImGui(window);
 
-    //Camera
+    //Set Up Camera
     Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
-    //Lighting
+    //Set Up Lighting
     Bella_GPR200::Lighting::Light directionalLight(glm::vec3(-0.2f, 1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f));
     directionalLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::PHONG);
 
-    //Shaders
+    //Initilize Shaders
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
     Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
     Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
 
-
-    //Model
+    //Initilize Models
     Bella_GPR200::Model testModel("assets/Models/plant.fbx");
 
     //OpenGL Settings
@@ -47,50 +47,6 @@ int main() {
 
     //Render Loop
     while (!glfwWindowShouldClose(window)) {
-
-        // Start new ImGui frame
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Create ImGui window
-        ImGui::Begin("Light Settings");
-
-        // Retrieve current K values from the light
-        float ambientK = directionalLight.GetAmbientK();
-        float diffuseK = directionalLight.GetDiffuseK();
-        float specularK = directionalLight.GetSpecularK();
-        float shininess = directionalLight.GetShininess();
-
-        // ImGui sliders for K values
-        ImGui::Text("K Values");
-        ImGui::Separator();
-
-        if (ImGui::SliderFloat("Ambient K", &ambientK, 0.0f, 1.0f)) {directionalLight.SetAmbientK(ambientK);}
-
-        if (ImGui::SliderFloat("Diffuse K", &diffuseK, 0.0f, 1.0f)) {directionalLight.SetDiffuseK(diffuseK);}
-
-        if (ImGui::SliderFloat("Specular K", &specularK, 0.0f, 1.0f)) {directionalLight.SetSpecularK(specularK);}
-
-        if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 128.0f)) {directionalLight.SetShininess(shininess);}
-
-        ImGui::Spacing();
-        ImGui::Spacing();
-
-        ImGui::Text("Light Color");
-        ImGui::Separator();
-
-        float color[3] = {directionalLight.GetColor().r, directionalLight.GetColor().g, directionalLight.GetColor().b};
-        if (ImGui::ColorEdit3("Light Color", color))
-        {
-            directionalLight.SetColour(glm::vec3(color[0], color[1], color[2]));
-        }
-
-
-        ImGui::End();
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 
         //Time Calculations
         float currentFrame = glfwGetTime();
@@ -113,10 +69,8 @@ int main() {
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
 
-
         //Lighting Instantiation
         directionalLight.SetLightUniforms(genModelShader);
-
 
         //Model Transformation
         glm::mat4 model = glm::mat4(1.0f);
@@ -124,20 +78,16 @@ int main() {
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         genModelShader.setMat4("model", model);
 
-        // Draw the model
+        //Draw the model
         testModel.Draw(genModelShader);
 
-        // ImGui rendering
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        //Draw UI
+        SM.LightWindow(directionalLight);
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-
-
     //10 : Terminate Program
     SM.Terminate(window);
-
 }

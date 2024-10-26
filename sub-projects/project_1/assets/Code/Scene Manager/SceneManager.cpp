@@ -46,6 +46,63 @@ void SceneManager::InitImGui(GLFWwindow* window)
     ImGui_ImplOpenGL3_Init("#version 330 core");
 }
 
+//Gui Windows
+void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    // Start a new ImGui window
+    ImGui::Begin("Light Settings");
+
+    // Retrieve current K values from the light
+    float ambientK = light.GetAmbientK();
+    float diffuseK = light.GetDiffuseK();
+    float specularK = light.GetSpecularK();
+    float shininess = light.GetShininess();
+
+    // ImGui sliders for K values
+    ImGui::Text("K Values");
+    ImGui::Separator();
+
+    if (ImGui::SliderFloat("Ambient K", &ambientK, 0.0f, 1.0f)) {
+        light.SetAmbientK(ambientK);
+    }
+
+    if (ImGui::SliderFloat("Diffuse K", &diffuseK, 0.0f, 1.0f)) {
+        light.SetDiffuseK(diffuseK);
+    }
+
+    if (ImGui::SliderFloat("Specular K", &specularK, 0.0f, 1.0f)) {
+        light.SetSpecularK(specularK);
+    }
+
+    if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 128.0f)) {
+        light.SetShininess(shininess);
+    }
+
+    ImGui::Spacing();
+    ImGui::Spacing();
+
+    // Light color
+    ImGui::Text("Light Color");
+    ImGui::Separator();
+    float color[3] = {light.GetColor().r, light.GetColor().g, light.GetColor().b};
+    if (ImGui::ColorEdit3("Light Color", color)) {
+        light.SetColour(glm::vec3(color[0], color[1], color[2]));
+    }
+
+    ImGui::End();
+
+    // Render the ImGui frame
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+
+
+
 void SceneManager::Terminate(GLFWwindow* window)
 {
     ImGui_ImplOpenGL3_Shutdown();
