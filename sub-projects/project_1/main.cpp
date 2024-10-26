@@ -36,6 +36,12 @@ void processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaT
         camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
 }
 
+int pixelSize = 200;
+
+glm::vec3 lightDir = glm::vec3(-0.2f, -1.0f, -0.3f); // Example direction
+glm::vec3 lightColor = glm::vec3(1.0f, 1.0f, 1.0f);  // White light
+
+
 
 
 int main() {
@@ -72,6 +78,7 @@ int main() {
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
 
     Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
+    Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
 
     //Mesh Testing
 
@@ -119,12 +126,13 @@ int main() {
         genModelShader.use();
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
+        genModelShader.setVec3("lightDir", lightDir);
+        genModelShader.setVec3("lightColor", lightColor);
 
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         genModelShader.setMat4("model", model);
-
         // Draw the model
         testModel.Draw(genModelShader);
 
