@@ -15,6 +15,8 @@ namespace Bella_GPR200
         {
             DIRECTIONAL,
             POINT,
+            SPOTLIGHT,
+
         };
 
         enum class LightingModel
@@ -27,10 +29,17 @@ namespace Bella_GPR200
         {
         public:
 
+            Light()
+                : type(LightType::DIRECTIONAL), model(LightingModel::PHONG), direction(glm::vec3(0.0f, -1.0f, 0.0f)),
+                  position(glm::vec3(0.0f)), colour(glm::vec3(1.0f)), intensity(1.0f), cutoff(12.5f),
+                  AmbientK(0.1f), DiffuseK(0.5f), SpecularK(1.0f), Shininess(32.0f) {}
+
             static Light CreateDirectional(const glm::vec3& direction, const glm::vec3& colour,
                                           LightingModel model = LightingModel::PHONG);
             static Light CreatePoint(const glm::vec3& position, const glm::vec3& colour,
                                      float intensity, LightingModel model = LightingModel::PHONG);
+            static Light CreateSpotlight(const glm::vec3& position, const glm::vec3& direction,
+                float cutoff, const glm::vec3& color, float intensity, LightingModel model = LightingModel::PHONG);
 
 
 
@@ -44,12 +53,14 @@ namespace Bella_GPR200
             void SetPosition(const glm::vec3& newPosition) { position = newPosition; }
             void SetDirection(const glm::vec3& newDirection) { direction = newDirection; }
             void SetIntensity(const float newIntensity) { intensity = newIntensity; }
+            void SetCutoff(const float newCutoff) {cutoff = newCutoff; }
 
             float GetAmbientK() { return AmbientK; }
             float GetDiffuseK() { return DiffuseK;}
             float GetSpecularK() { return SpecularK; }
             float GetShininess() { return Shininess; }
             float GetIntensity() const {return intensity;}
+            float GetCutoff() const {return cutoff;}
 
             glm::vec3 GetColor() const {return colour;}
             glm::vec3 GetPosition() const {return position;}
@@ -71,9 +82,7 @@ namespace Bella_GPR200
             float DiffuseK = 0.5f;
             float SpecularK = 1.0f;
             float Shininess = 32.0f;
-
-            Light(glm::vec3 direction, glm::vec3 colour, LightingModel model = LightingModel::PHONG);
-            Light(glm::vec3 position, glm::vec3 color, float intensity, LightingModel model = LightingModel::PHONG);
+            float cutoff = 12.5f; //Spotlight
 
         };
     }

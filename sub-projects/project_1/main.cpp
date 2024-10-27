@@ -31,7 +31,20 @@ int main() {
     Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
     //Set Up Lighting
-    Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+    Bella_GPR200::Lighting::Light dirLight = Bella_GPR200::Lighting::Light::CreateDirectional(
+    glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f)
+);
+
+    // Create a Point Light
+    Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
+        glm::vec3(0.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.8f, 0.6f), 1.0f
+    );
+
+    // Create a Spotlight
+    Bella_GPR200::Lighting::Light spotLight = Bella_GPR200::Lighting::Light::CreateSpotlight(
+        glm::vec3(0.0f, 1.0f, 2.0f), glm::vec3(0.0f, -1.0f, 0.0f), 12.5f, glm::vec3(1.0f, 0.8f, 0.6f), 1.0f
+    );
+
 
     //Initilize Shaders
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
@@ -68,18 +81,13 @@ int main() {
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
 
-        if (pointLight.GetType() == Bella_GPR200::Lighting::LightType::DIRECTIONAL) {
-            genModelShader.setInt("lightType", 0); // Directional light
-        } else {
-            genModelShader.setInt("lightType", 1); // Point light
-        }
 
         //Lighting Instantiation
         pointLight.SetLightUniforms(genModelShader);
 
         //Model Transformation
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -1.5f));
         model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
         genModelShader.setMat4("model", model);
 
