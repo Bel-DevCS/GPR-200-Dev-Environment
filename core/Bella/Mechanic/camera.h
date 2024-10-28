@@ -47,9 +47,11 @@ namespace Bella_GPR200
         void MouseInput(float xoffset, float yoffset, bool constrainPitch = true);
         void ScrollInput(float yoffset);
 
+        void updateCameraVectors();
+
     private:
         // Updates the camera vectors based on the current values of Yaw and Pitch
-        void updateCameraVectors();
+
     };
 
 };
