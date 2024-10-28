@@ -29,3 +29,4 @@ add_subdirectory(assignments/assignment_2)
 add_subdirectory(assignments/assignment_4)
 
 add_subdirectory(sub-projects/project_1)
+add_subdirectory(sub-projects/project_2)
