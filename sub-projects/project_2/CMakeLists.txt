@@ -20,7 +20,8 @@ add_executable(project2 ${PROJECT2_SRC} ${PROJECT2_INC}
         assets/Code/Library/Scene.cpp
         assets/Code/Library/Scene.h
         assets/Code/Library/WindowManager.cpp
-        assets/Code/Library/WindowManager.h)
+        assets/Code/Library/WindowManager.h
+        assets/Code/Objects/camera.cpp)
 target_link_libraries(project2 PUBLIC core IMGUI glm assimp)
 target_include_directories(project2 PUBLIC ${CORE_INC_DIR} ${stb_INCLUDE_DIR} ${assimp_INCLUDE_DIRS})
 
