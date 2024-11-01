@@ -1,5 +1,7 @@
 #include "UserInput.h"
 
+#include <imgui.h>
+
 UserInput::UserInput()
     : lastX(540.0f), lastY(360.0f), firstMouse(true), isPerspective(true), isMouseLocked(true)
 {
@@ -7,21 +9,30 @@ UserInput::UserInput()
 
 void UserInput::processInput(GLFWwindow* window, Bella_GPR200::Camera& camera, float deltaTime)
 {
-    // Set camera movement speed if shift is pressed
-    camera.MovementSpeed = (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
-                            glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) ? 10.0f : 1.0f;
+    ImGuiIO& io = ImGui::GetIO();
 
-    // Camera movement controls
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::DOWN, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::UP, deltaTime);
+    // Process camera movement if ImGui isn't capturing keyboard input
+    if (!io.WantCaptureKeyboard) {
+        camera.MovementSpeed = (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
+                                glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS) ? 10.0f : 1.0f;
 
-    // Handle projection toggle and mouse lock
-    handleProjectionToggle(window);
-    handleMouseLockToggle(window);
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::FORWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::BACKWARD, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::LEFT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::RIGHT, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::DOWN, deltaTime);
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) camera.KeyboardInput(Bella_GPR200::UP, deltaTime);
+    }
+
+    // Handle projection toggle only if ImGui isn't capturing keyboard input
+    if (!io.WantCaptureKeyboard) {
+        handleProjectionToggle(window);
+    }
+
+    // Handle mouse lock toggle if ImGui isn't capturing mouse input
+    if (!io.WantCaptureMouse) {
+        handleMouseLockToggle(window);
+    }
 }
 
 void UserInput::handleProjectionToggle(GLFWwindow* window)
@@ -38,10 +49,12 @@ void UserInput::handleProjectionToggle(GLFWwindow* window)
 
 void UserInput::handleMouseLockToggle(GLFWwindow* window)
 {
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
+    ImGuiIO& io = ImGui::GetIO();
+
+    // Only toggle if ImGui does NOT want the mouse
+    if (!io.WantCaptureMouse && glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         isMouseLocked = !isMouseLocked;
         glfwSetInputMode(window, GLFW_CURSOR, isMouseLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
-        glfwWaitEventsTimeout(0.2);  // Slight delay to avoid toggling too quickly
     }
 }
 

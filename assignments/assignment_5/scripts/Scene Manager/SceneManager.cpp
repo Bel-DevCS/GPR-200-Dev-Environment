@@ -40,7 +40,7 @@ void SceneManager::InitImGui(GLFWwindow* window)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    //ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330 core");
@@ -49,10 +49,6 @@ void SceneManager::InitImGui(GLFWwindow* window)
 //Gui Windows
 void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
 {
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
     // Start a new ImGui window
     ImGui::Begin("Light Settings");
 
@@ -136,10 +132,6 @@ void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
     }
 
     ImGui::End();
-
-    // Render the ImGui frame
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
 

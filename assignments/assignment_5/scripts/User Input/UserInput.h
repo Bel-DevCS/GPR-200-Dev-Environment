@@ -23,15 +23,17 @@ public:
     static void scroll_callback(GLFWwindow* window, double x_offset, double y_offset);
     static void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
-    bool isPerspectiveEnabled() const { return isPerspective; }
-    glm::mat4 getProjectionMatrix(const Bella_GPR200::Camera& camera,float aspectRatio) const;
+    [[nodiscard]] bool isPerspectiveEnabled() const { return isPerspective; }
+    [[nodiscard]] glm::mat4 getProjectionMatrix(const Bella_GPR200::Camera& camera,float aspectRatio) const;
+
+    bool isMouseLocked;
 
 private:
     float lastX;
     float lastY;
     bool firstMouse;
     bool isPerspective;
-    bool isMouseLocked;
+
 };
 
 struct InputContext
