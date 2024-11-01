@@ -43,6 +43,9 @@ int main() {
 
     Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
         glm::vec3(0.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.8f, 0.6f), 5.0f);
+
+    pointLight.SetLightingModel(Bella_GPR200::Lighting::LightingModel::BLINN_PHONG);
+
     Bella_GPR200::Shader lightCubeShader("assets/Shaders/Light Cube/lightCubeVert.vert", "assets/Shaders/Light Cube/lightCubeFrag.frag");
 
     Bella_GPR200::Shader ourShader("assets/Shaders/vertexShader.vert", "assets/Shaders/fragmentShader.frag");
@@ -105,11 +108,14 @@ int main() {
         glm::mat4 view = cam.GetViewMatrix();
         ourShader.setMat4("view", view);
         ourShader.setMat4("projection", projection);
+
         pointLight.SetLightUniforms(ourShader);
+
 
         // Draw each scene cube
         glBindVertexArray(cubeVAO);
-        for (unsigned int i = 0; i < numCubes; i++) {
+        for (unsigned int i = 0; i < numCubes; i++)
+        {
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cubePositions[i]);
             model = glm::rotate(model, cubeRotationSpeeds[i] * currentFrame, cubeRotationAxes[i]);

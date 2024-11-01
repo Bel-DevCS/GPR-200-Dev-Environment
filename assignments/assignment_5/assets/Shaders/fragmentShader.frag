@@ -1,4 +1,3 @@
-//Roughly cloned from GenericModelShader (Located in Project_1)
 #version 330 core
 
 out vec4 FragColor;
@@ -32,76 +31,58 @@ uniform float uOscillationOffset;
 
 void main()
 {
-    // Normalize normal vector
+    // Normalize the normal vector
     vec3 norm = normalize(Normal);
 
-    // Compute ambient color
+    // Ambient component
     vec3 ambient = AmbientK * lightColor * lightIntensity;
 
-    // Initialize variables for diffuse and specular components
+    // Diffuse and Specular components initialization
     vec3 diffuse = vec3(0.0);
     vec3 specular = vec3(0.0);
 
-    // Calculate lighting based on light type
-    if (lightType == 0) // Directional light
-    {
-        vec3 lightDirNormalized = normalize(lightDir);
-        float diffStrength = max(dot(norm, lightDirNormalized), 0.0);
-        diffuse = DiffuseK * diffStrength * lightColor * lightIntensity;
+    // Define light direction and attenuation for each light type
+    vec3 lightDirection;
+    float attenuation = 1.0;
 
-        vec3 viewDir = normalize(viewPos - FragPos);
-        vec3 reflectDir = reflect(-lightDirNormalized, norm);
-        float spec = 0.0;
-        if (lightingModel == 0)
-        spec = pow(max(dot(viewDir, reflectDir), 0.0), Shininess);
-        else
-        spec = pow(max(dot(norm, normalize(lightDirNormalized + viewDir)), 0.0), Shininess);
-
-        specular = SpecularK * spec * lightColor * lightIntensity;
+    if (lightType == 0) { // Directional Light
+                          lightDirection = normalize(-lightDir);
     }
-    else if (lightType == 1) // Point light
-    {
-        vec3 lightDirToLight = normalize(lightPos - FragPos);
-        float distance = length(lightPos - FragPos);
-        float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * (distance * distance));
-
-        float diffStrength = max(dot(norm, lightDirToLight), 0.0);
-        diffuse = DiffuseK * diffStrength * lightColor * attenuation * lightIntensity;
-
-        vec3 viewDir = normalize(viewPos - FragPos);
-        vec3 reflectDir = reflect(-lightDirToLight, norm);
-        float spec = 0.0;
-        if (lightingModel == 0)
-        spec = pow(max(dot(viewDir, reflectDir), 0.0), Shininess);
-        else
-        spec = pow(max(dot(norm, normalize(lightDirToLight + viewDir)), 0.0), Shininess);
-
-        specular = SpecularK * spec * lightColor * attenuation * lightIntensity;
+    else if (lightType == 1) { // Point Light
+                               lightDirection = normalize(lightPos - FragPos);
+                               float distance = length(lightPos - FragPos);
+                               attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * distance * distance);
     }
-    else if (lightType == 2) // Spotlight
-    {
-        vec3 lightDirToLight = normalize(lightPos - FragPos);
-        float theta = dot(lightDirToLight, normalize(-lightDir));
+    else if (lightType == 2) { // Spotlight
+                               lightDirection = normalize(lightPos - FragPos);
+                               float theta = dot(lightDirection, normalize(-lightDir));
 
-        if (theta > cutoff)
-        {
-            float distance = length(lightPos - FragPos);
-            float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * (distance * distance));
-
-            float diffStrength = max(dot(norm, lightDirToLight), 0.0);
-            diffuse = DiffuseK * diffStrength * lightColor * attenuation * lightIntensity;
-
-            vec3 viewDir = normalize(viewPos - FragPos);
-            vec3 reflectDir = reflect(-lightDirToLight, norm);
-            float spec = 0.0;
-            if (lightingModel == 0)
-            spec = pow(max(dot(viewDir, reflectDir), 0.0), Shininess);
-            else
-            spec = pow(max(dot(norm, normalize(lightDirToLight + viewDir)), 0.0), Shininess);
-
-            specular = SpecularK * spec * lightColor * attenuation * lightIntensity;
-        }
+                               if (theta > cutoff) {
+                                   float distance = length(lightPos - FragPos);
+                                   attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * distance * distance);
+                               } else {
+                                   attenuation = 0.0; // Outside the spotlight cone
+                               }
     }
+
+    // Diffuse calculation
+    float diffStrength = max(dot(norm, lightDirection), 0.0);
+    diffuse = DiffuseK * diffStrength * lightColor * attenuation * lightIntensity;
+
+    // Specular calculation
+    vec3 viewDir = normalize(viewPos - FragPos);
+    float spec = 0.0;
+
+    if (lightingModel == 0) { // Phong Model
+                              vec3 reflectDir = reflect(-lightDirection, norm);
+                              spec = pow(max(dot(viewDir, reflectDir), 0.0), Shininess);
+    }
+    else if (lightingModel == 1) { // Blinn-Phong Model
+                                   vec3 halfwayDir = normalize(lightDirection + viewDir);
+                                   spec = pow(max(dot(norm, halfwayDir), 0.0), Shininess);
+    }
+
+    specular = SpecularK * spec * lightColor * attenuation * lightIntensity;
 
     // Texture color (background texture)
     vec4 texColor = texture(bgTex, TexCoord);
@@ -111,10 +92,10 @@ void main()
     float intensity = 0.1;
     float oscillation = sin(uTime * speed + uOscillationOffset) * intensity + 0.5;
 
-    // Calculate the final color, combining lighting, texture, and oscillation effect
+    // Final color combining lighting, texture, and oscillation effect
     vec3 lightingColor = ambient + diffuse + specular;
     vec4 finalColor = texColor * (cubeColour * oscillation);
 
-    // Apply lighting to final color
+    // Apply lighting to the final color
     FragColor = vec4(finalColor.rgb * lightingColor, 1.0);
 }

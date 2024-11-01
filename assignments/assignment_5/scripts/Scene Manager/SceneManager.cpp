@@ -47,7 +47,7 @@ void SceneManager::InitImGui(GLFWwindow* window)
 }
 
 //Gui Windows
-void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
+    void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
 {
     // Start a new ImGui window
     ImGui::Begin("Light Settings");
@@ -59,7 +59,7 @@ void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
     float shininess = light.GetShininess();
 
     // ImGui sliders for K values
-    ImGui::Text("K Values");
+    ImGui::Text("Material K Values");
     ImGui::Separator();
 
     if (ImGui::SliderFloat("Ambient K", &ambientK, 0.0f, 1.0f)) {
@@ -92,42 +92,28 @@ void SceneManager::LightWindow(Bella_GPR200::Lighting::Light& light)
     ImGui::Spacing();
     ImGui::Spacing();
 
-    // Light position controls
-    switch (light.GetType())
-    {
-    case Bella_GPR200::Lighting::LightType::DIRECTIONAL:
-        {
-            ImGui::Text("Directional Light Settings");
-            ImGui::Separator();
+    // Light position controls for Point Light and Direction for Directional Light
+    ImGui::Text("Light Position/Direction");
+    ImGui::Separator();
 
-            // Direction Controls
-            glm::vec3 direction = light.GetDirection();
-            if (ImGui::DragFloat3("Direction", &direction[0], 0.1f, -1.0f, 1.0f))
-            {
-                light.SetDirection(direction);
-            }
-            break;
+    if (light.GetType() == Bella_GPR200::Lighting::LightType::POINT)
+    {
+        glm::vec3 position = light.GetPosition();
+        if (ImGui::DragFloat3("Position", &position[0], 0.1f, -10.0f, 10.0f)) {
+            light.SetPosition(position);
         }
 
-    case Bella_GPR200::Lighting::LightType::POINT:
-        {
-            ImGui::Text("Point Light Settings");
-            ImGui::Separator();
-
-            // Position Controls
-            glm::vec3 position = light.GetPosition();
-            if (ImGui::DragFloat3("Position", &position[0], 0.1f, -10.0f, 10.0f))
-            {
-                light.SetPosition(position);
-            }
-
-            // Intensity Control
-            float intensity = light.GetIntensity();
-            if (ImGui::SliderFloat("Intensity", &intensity, 0.0f, 10.0f))
-            {
-                light.SetIntensity(intensity);
-            }
-            break;
+        // Intensity Control
+        float intensity = light.GetIntensity();
+        if (ImGui::SliderFloat("Intensity", &intensity, 0.0f, 10.0f)) {
+            light.SetIntensity(intensity);
+        }
+    }
+    else if (light.GetType() == Bella_GPR200::Lighting::LightType::DIRECTIONAL)
+    {
+        glm::vec3 direction = light.GetDirection();
+        if (ImGui::DragFloat3("Direction", &direction[0], 0.1f, -1.0f, 1.0f)) {
+            light.SetDirection(direction);
         }
     }
 
