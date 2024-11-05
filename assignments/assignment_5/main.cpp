@@ -35,11 +35,14 @@ int main() {
     InputContext inputContext = {&cam, &UI};
     GLFWwindow* window = SceneManager::InitializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Assignment 5 : Lighting");
     if (!window) return -1;
-    SM.InitImGui(window);
 
+    //Do first
     glfwSetWindowUserPointer(window, &inputContext);
     glfwSetScrollCallback(window, UserInput::scroll_callback);
     glfwSetCursorPosCallback(window, UserInput::mouse_callback);
+
+    //Do second
+    SM.InitImGui(window);
 
     Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
         glm::vec3(0.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.8f, 0.6f), 5.0f);
@@ -146,8 +149,8 @@ int main() {
         glBindVertexArray(0);
 
         //Draw UI
-       SM.LightWindow(pointLight);
-       //SimpleLightControlUI(pointLight);
+      // SM.LightWindow(pointLight);
+       SimpleLightControlUI(pointLight);
        // SimpleButton();
 
         ImGui::Render();

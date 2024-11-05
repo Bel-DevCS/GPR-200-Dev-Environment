@@ -1,0 +1,6 @@
+vec3 calculateSpecular(vec3 norm, vec3 lightDir, vec3 viewDir)
+ {
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    float spec = pow(max(dot(norm, halfwayDir), 0.0), Shininess);
+    return SpecularK * spec * lightColor * lightIntensity;
+}

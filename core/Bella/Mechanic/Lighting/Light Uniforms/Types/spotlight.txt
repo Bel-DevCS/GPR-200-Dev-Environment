@@ -1,0 +1,19 @@
+vec3 calculateSpotLight(vec3 norm, vec3 viewDir, vec3 fragPos)
+{
+    vec3 lightDirToLight = normalize(lightPos - fragPos);
+    float theta = dot(lightDirToLight, normalize(-lightDir));
+
+    // Only apply light if within spotlight cone
+    if (theta > cutoff) {
+        float distance = length(lightPos - fragPos);
+        float attenuation = 1.0 / (1.0 + 0.09 * distance + 0.032 * (distance * distance));
+
+        float diffStrength = max(dot(norm, lightDirToLight), 0.0);
+        vec3 diffuse = DiffuseK * diffStrength * lightColor * attenuation * lightIntensity;
+
+        vec3 specular = calculateSpecular(norm, lightDirToLight, viewDir);
+        return AmbientK * lightColor * attenuation * lightIntensity + diffuse + specular;
+    }
+
+    return vec3(0.0);
+}

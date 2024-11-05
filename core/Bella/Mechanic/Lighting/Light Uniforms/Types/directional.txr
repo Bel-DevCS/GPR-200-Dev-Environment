@@ -1,0 +1,9 @@
+vec3 calculateDirectionalLight(vec3 norm, vec3 viewDir)
+{
+    vec3 lightDirNormalized = normalize(lightDir);
+    float diffStrength = max(dot(norm, lightDirNormalized), 0.0);
+    vec3 diffuse = DiffuseK * diffStrength * lightColor * lightIntensity;
+
+    vec3 specular = calculateSpecular(norm, lightDirNormalized, viewDir);
+    return AmbientK * lightColor * lightIntensity + diffuse + specular;
+}

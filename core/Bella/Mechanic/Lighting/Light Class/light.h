@@ -4,8 +4,10 @@
 
 #pragma once
 
-#include <glm/glm.hpp>
-#include "shader.h"
+#include "glm/glm.hpp"
+#include "../../shader.h"
+
+class Shader;
 
 namespace Bella_GPR200
 {

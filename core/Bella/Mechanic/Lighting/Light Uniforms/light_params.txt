@@ -1,0 +1,11 @@
+uniform vec3 viewPos;
+uniform vec3 lightColor;
+uniform vec3 lightDir;
+uniform vec3 lightPos;
+uniform float lightIntensity;
+
+
+uniform float AmbientK;
+uniform float DiffuseK;
+uniform float SpecularK;
+uniform float Shininess;

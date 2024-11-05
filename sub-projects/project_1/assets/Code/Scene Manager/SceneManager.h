@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "../core/Bella/Mechanic/light.h"
+#include "Bella/Mechanic/Lighting/Light Class/light.h"
 
 #include <ew/external/glad.h>
 #include <GLFW/glfw3.h>

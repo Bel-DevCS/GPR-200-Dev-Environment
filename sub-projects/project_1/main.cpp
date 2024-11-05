@@ -7,7 +7,7 @@
 #include "Bella/Mechanic/shader.h"
 #include "Bella/Mechanic/Model/mesh.h"
 #include "Bella/Mechanic/Model/model.h"
-#include "Bella/Mechanic/light.h"
+#include "Bella/Mechanic/Lighting/Light Class/light.h"
 
 
 //Global Variables
