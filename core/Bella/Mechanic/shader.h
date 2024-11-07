@@ -11,8 +11,7 @@ namespace Bella_GPR200
 {
     namespace Lighting
     {
-        enum class LightingModel;
-        enum class LightType;
+        class Light;
     }
 
     class Shader
@@ -22,9 +21,7 @@ namespace Bella_GPR200
             Shader(const char* vertexPath, const char* fragmentPath);
 
             // Feature toggles
-            void AddLighting(
-                    Bella_GPR200::Lighting::LightingModel lightModel,
-                    Bella_GPR200::Lighting::LightType lightType);
+            void AddLighting(Bella_GPR200::Lighting::Light light);
           //  void AddTexture(const std::string& texturePath);
 
             //Set Uniforms

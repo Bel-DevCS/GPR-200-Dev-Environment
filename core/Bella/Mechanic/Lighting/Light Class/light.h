@@ -68,6 +68,7 @@ namespace Bella_GPR200
             glm::vec3 GetPosition() const {return position;}
             glm::vec3 GetDirection() const {return direction;}
 
+            LightingModel GetModel() const {return model;}
             LightType GetType() const {return type;}
 
 

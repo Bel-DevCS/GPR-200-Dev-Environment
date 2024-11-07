@@ -33,16 +33,6 @@ GLFWwindow* SceneManager::InitializeWindow(int width, int height, const char* ti
         return nullptr;
     }
 
-    // Get primary monitor
-    GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-    const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
-
-    // Calculate center position
-    int posX = (mode->width - width) / 2;
-    int posY = (mode->height - height) / 2;
-
-    glfwSetWindowPos(window, posX, posY);
-
     return window;
 }
 

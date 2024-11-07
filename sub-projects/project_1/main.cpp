@@ -50,6 +50,7 @@ int main() {
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
     Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
     Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
+   // Bella_GPR200::Shader testShader("assets/Shaders/Test Shaders/testShaderVertex.vert", "assets/Shaders/Test Shaders/testShaderFragment.frag");
 
     //Initilize Models
     Bella_GPR200::Model testModel("assets/Models/plant.fbx");

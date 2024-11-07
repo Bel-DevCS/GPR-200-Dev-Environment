@@ -118,74 +118,51 @@ namespace Bella_GPR200 {
 
 
     //Function
-    void Shader::AddLighting(
-            Bella_GPR200::Lighting::LightingModel lightModel,
-            Bella_GPR200::Lighting::LightType lightType) {
+    void Shader::AddLighting(Bella_GPR200::Lighting::Light light) {
         hasLighting = true;
 
-        const char *modelFile;
-        const char *typeFile;
-        const char *paramsFile = "light_params.txt";
+        // Paths to the shader components
+        const char* paramsFile = "../Lighting/Light Uniforms/light_params.txt";
+        const char* modelFile;
+        const char* typeFile;
 
-        // Select the appropriate lighting model file
-        switch (lightModel) {
-            case Bella_GPR200::Lighting::LightingModel::PHONG:
-                modelFile = "phong.txt";
-                break;
-            case Bella_GPR200::Lighting::LightingModel::BLINN_PHONG:
-                modelFile = "blinn_phong.txt";
-                break;
-            default:
-                std::cerr << "ERROR: Unknown Lighting Model" << std::endl;
-                return;
+        // Determine lighting model file
+        if (light.GetModel() == Bella_GPR200::Lighting::LightingModel::BLINN_PHONG) {
+            modelFile = "../Lighting/Light Uniforms/Models/blinn_phong.txt";
+        } else {
+            modelFile = "../Lighting/Light Uniforms/Models/phong.txt";
         }
 
-        // Select the appropriate lighting type file
-        switch (lightType) {
-            case Bella_GPR200::Lighting::LightType::POINT:
-                typeFile = "point.txt";
-                break;
+        // Determine lighting type file
+        switch (light.GetType()) {
             case Bella_GPR200::Lighting::LightType::DIRECTIONAL:
-                typeFile = "directional.txt";
+                typeFile = "../Lighting/Light Uniforms/Types/directional.txt";
+                break;
+            case Bella_GPR200::Lighting::LightType::POINT:
+                typeFile = "../Lighting/Light Uniforms/Types/point.txt";
                 break;
             case Bella_GPR200::Lighting::LightType::SPOTLIGHT:
-                typeFile = "spotlight.txt";
+                typeFile = "Lighting/Light Uniforms/Types/spotlight.txt";
                 break;
-            default:
-                std::cerr << "ERROR: Unknown Light Type" << std::endl;
-                return;
         }
 
-        // Load the lighting model code
-        std::ifstream modelFileStream(modelFile);
-        if (modelFileStream) {
-            std::stringstream modelStream;
-            modelStream << modelFileStream.rdbuf();
-            lightingCode = modelStream.str();  // Start with model code
-        } else {
-            std::cerr << "ERROR: Failed to load lighting model file: " << modelFile << std::endl;
-            return;
-        }
+        std::cout << "Lighting Parameters Code:\n" << paramsFile << std::endl;
+        std::cout << "Lighting Model Code:\n" << modelFile << std::endl;
+        std::cout << "Lighting Type Code:\n" << lightingCode << std::endl;
 
-        // Load the lighting type code and append it to lightingCode
-        std::ifstream typeFileStream(typeFile);
-        if (typeFileStream)
-        {
-            std::stringstream typeStream;
-            typeStream << typeFileStream.rdbuf();
-            lightingCode += typeStream.str();  // Append type code
-        }
-        else
-        {
-            std::cerr << "ERROR: Failed to load lighting type file: " << typeFile << std::endl;
-        }
 
+        // Replace placeholders in the fragment shader code
         ReplacePlaceholder(fragmentCode, "//~LightingParams", LoadShaderCode(paramsFile));
         ReplacePlaceholder(fragmentCode, "//~LightingModel", LoadShaderCode(modelFile));
         ReplacePlaceholder(fragmentCode, "//~LightingType", LoadShaderCode(typeFile));
 
+        std::cout << "Fragment Shader Code After Replacement:\n" << fragmentCode << std::endl;
+
+
+        // Compile shader with updated code
         CompileShader(vertexCode, fragmentCode);
     }
+
 
 
 }
