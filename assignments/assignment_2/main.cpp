@@ -7,8 +7,8 @@
 #include <glm/glm.hpp>
 #include <iostream>
 
-#include "Bella/Mechanic/shader.h"
-#include "Bella/Mechanic/texture.h"
+#include "Bella/Mechanic/Shader/shader.h"
+#include "Bella/Mechanic/Texture/texture.h"
 
 #include <EW/external/stb_image.h>
 

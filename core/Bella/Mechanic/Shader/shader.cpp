@@ -34,14 +34,6 @@ namespace Bella_GPR200 {
         return shaderStream.str();
     }
 
-    // Function to replace placeholders in shader code
-    void Shader::ReplacePlaceholder(std::string& shaderCode, const std::string& placeholder, const std::string& replacement) {
-        size_t pos = shaderCode.find(placeholder);
-        while (pos != std::string::npos) {
-            shaderCode.replace(pos, placeholder.length(), replacement);
-            pos = shaderCode.find(placeholder, pos + replacement.length());
-        }
-    }
 
     void Shader::CompileShader(const std::string& vertexCode, const std::string& fragmentCode) {
         const char* vShaderCode = vertexCode.c_str();
@@ -115,54 +107,5 @@ namespace Bella_GPR200 {
     void Shader::setVec4(const std::string &name, const glm::vec4 &value) const {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), value.x, value.y, value.z, value.w);
     }
-
-
-    //Function
-    void Shader::AddLighting(Bella_GPR200::Lighting::Light light) {
-        hasLighting = true;
-
-        // Paths to the shader components
-        const char* paramsFile = "../Lighting/Light Uniforms/light_params.txt";
-        const char* modelFile;
-        const char* typeFile;
-
-        // Determine lighting model file
-        if (light.GetModel() == Bella_GPR200::Lighting::LightingModel::BLINN_PHONG) {
-            modelFile = "../Lighting/Light Uniforms/Models/blinn_phong.txt";
-        } else {
-            modelFile = "../Lighting/Light Uniforms/Models/phong.txt";
-        }
-
-        // Determine lighting type file
-        switch (light.GetType()) {
-            case Bella_GPR200::Lighting::LightType::DIRECTIONAL:
-                typeFile = "../Lighting/Light Uniforms/Types/directional.txt";
-                break;
-            case Bella_GPR200::Lighting::LightType::POINT:
-                typeFile = "../Lighting/Light Uniforms/Types/point.txt";
-                break;
-            case Bella_GPR200::Lighting::LightType::SPOTLIGHT:
-                typeFile = "Lighting/Light Uniforms/Types/spotlight.txt";
-                break;
-        }
-
-        std::cout << "Lighting Parameters Code:\n" << paramsFile << std::endl;
-        std::cout << "Lighting Model Code:\n" << modelFile << std::endl;
-        std::cout << "Lighting Type Code:\n" << lightingCode << std::endl;
-
-
-        // Replace placeholders in the fragment shader code
-        ReplacePlaceholder(fragmentCode, "//~LightingParams", LoadShaderCode(paramsFile));
-        ReplacePlaceholder(fragmentCode, "//~LightingModel", LoadShaderCode(modelFile));
-        ReplacePlaceholder(fragmentCode, "//~LightingType", LoadShaderCode(typeFile));
-
-        std::cout << "Fragment Shader Code After Replacement:\n" << fragmentCode << std::endl;
-
-
-        // Compile shader with updated code
-        CompileShader(vertexCode, fragmentCode);
-    }
-
-
 
 }

@@ -9,11 +9,11 @@
 
 #include "scripts/Scene Manager/SceneManager.h"
 #include "scripts/User Input/UserInput.h"
-#include "Bella/Mechanic/shader.h"
-#include "Bella/Mechanic/texture.h"
-#include "Bella/Definitions/drawShape.h"
-#include "Bella/Definitions/definitionFunctions.h"
-#include "Bella/Definitions/definitionColours.h"
+#include "Bella/Mechanic/Shader/shader.h"
+#include "Bella/Mechanic/Texture/texture.h"
+#include "Bella/Definitions/Shapes/Vertex/drawShape.h"
+#include "Bella/Definitions/Misc Functions/definitionFunctions.h"
+#include "Bella/Definitions/Colours/definitionColours.h"
 
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;

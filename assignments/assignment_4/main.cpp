@@ -7,13 +7,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-#include "Bella/Mechanic/shader.h"
-#include "Bella/Mechanic/texture.h"
-#include "Bella/Mechanic/camera.h"
+#include "Bella/Mechanic/Shader/shader.h"
+#include "Bella/Mechanic/Texture/texture.h"
+#include "Bella/Mechanic/Camera/camera.h"
 
-#include "Bella/Definitions/drawShape.h"
-#include "Bella/Definitions/definitionFunctions.h"
-#include "Bella/Definitions/definitionColours.h"
+#include "Bella/Definitions/Shapes/Vertex/drawShape.h"
+#include "Bella/Definitions/Misc Functions/definitionFunctions.h"
+#include "Bella/Definitions/Colours/definitionColours.h"
 
 
 

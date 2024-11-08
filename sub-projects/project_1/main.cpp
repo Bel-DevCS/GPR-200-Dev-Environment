@@ -3,8 +3,8 @@
 #include "assets/Code/User Input/UserInput.h"
 
 
-#include "Bella/Definitions/drawShape.h"
-#include "Bella/Mechanic/shader.h"
+#include "Bella/Definitions/Shapes/Vertex/drawShape.h"
+#include "Bella/Mechanic/Shader/shader.h"
 #include "Bella/Mechanic/Model/mesh.h"
 #include "Bella/Mechanic/Model/model.h"
 #include "Bella/Mechanic/Lighting/Light Class/light.h"

@@ -6,7 +6,7 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "Bella/Mechanic/camera.h"
+#include "Bella/Mechanic/Camera/camera.h"
 
 // Struct to hold references to UserInput and Camera
 

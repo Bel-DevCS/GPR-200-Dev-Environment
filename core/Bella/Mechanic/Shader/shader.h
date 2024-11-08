@@ -1,11 +1,11 @@
 #pragma once
-#include "../../ew/external/glad.h"
+#include "../../../ew/external/glad.h"
 #include "glm/glm.hpp"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 
-#include "Lighting/Light Class/light.h"
+#include "../Lighting/Light Class/light.h"
 
 namespace Bella_GPR200
 {
