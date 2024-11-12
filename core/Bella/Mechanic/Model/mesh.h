@@ -5,7 +5,7 @@
 #include <vector>
 #include "../../../ew/external/glad.h"
 
-#include "Bella/Mechanic/Shader/shader.h"
+#include "../Shader/shader.h"
 
 namespace Bella_GPR200
 {
