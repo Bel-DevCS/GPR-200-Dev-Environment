@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include <vector>
+#include "../../../ew/external/glad.h"
 
 #include "Bella/Mechanic/Shader/shader.h"
 

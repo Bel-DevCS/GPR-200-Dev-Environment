@@ -9,20 +9,12 @@
 
 namespace Bella_GPR200
 {
-    namespace Lighting
-    {
-        class Light;
-    }
 
     class Shader
     {
         public:
             unsigned int ID;
             Shader(const char* vertexPath, const char* fragmentPath);
-
-            // Feature toggles
-            void AddLighting(Bella_GPR200::Lighting::Light light);
-          //  void AddTexture(const std::string& texturePath);
 
             //Set Uniforms
             void setBool(const std::string &name, bool value) const;
@@ -35,17 +27,11 @@ namespace Bella_GPR200
             void use() {glUseProgram(ID);}
 
         private:
-        bool hasLighting = false;
-        bool hasTexture = false;
-        std::string lightingCode;
-        std::string textureCode;
 
-        std::string fragmentCode;
-        std::string vertexCode;
-
-        void ReplacePlaceholder(std::string& shaderCode, const std::string& placeholder, const std::string& replacement);
         void CompileShader(const std::string& vertexCode, const std::string& fragmentCode);
         std::string LoadShaderCode(const char* filePath);
+        std::string vertexCode;
+        std::string fragmentCode;
 
     };
 }
