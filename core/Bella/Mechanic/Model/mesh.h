@@ -7,6 +7,8 @@
 
 #include "Bella/Mechanic/Shader/shader.h"
 
+class Shader;
+
 namespace Bella_GPR200
 {
     struct Vertex
