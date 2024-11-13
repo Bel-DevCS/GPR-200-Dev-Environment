@@ -8,101 +8,89 @@
 #include <iostream>
 
 #include "Bella/Mechanic/Shader/shader.h"
+#include "assets/code/SceneManager/SceneManager.h"
+#include "Bella/Mechanic/Camera/camera.h"
+#include "Bella/Mechanic/Model/model.h"
 
 
 const int SCREEN_WIDTH = 1080;
 const int SCREEN_HEIGHT = 720;
 
+float deltaTime = 0.0f;  // Time between current frame and last frame
+float lastFrame = 0.0f;  // Time of the last frame
+
+SceneManager SM;
 
 int main() {
 
-    //1 : Create Program Window
-    #pragma region Initialize Window
-    printf("Initializing...");
+    //1 : Innit Program Window
+    GLFWwindow* window = SM.InitializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 3 : AAAAA");
+    if (!window) return -1;
+    SM.InitImGui(window);
 
-    //1(a) : Ensure Core Profile is Correct
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    //1(b) : Check if GLFW fails to Initiate
-    if (!glfwInit()) {
-        printf("GLFW failed to init!");
-        return 1;
-    }
-
-    //1(c) : Create Window
-    GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Hello Triangle", NULL, NULL);
-    if (window == NULL) {
-        printf("GLFW failed to create window");
-        return 1;
-    }
-    glfwMakeContextCurrent(window);
-    if (!gladLoadGL(glfwGetProcAddress)) {
-        printf("GLAD Failed to load GL headers");
-        return 1;
-    }
-#pragma endregion
-
-    //2 : Instantiate Shader
+    //2 : Innit Shader(s)
     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
+    Bella_GPR200::Shader genModelShader("assets/shaders/generic/genericModel.vert",
+                                        "assets/shaders/generic/genericModel.frag");
 
-    //3 : Create Shape
-    float vertices[] =
-            {
-                    //X     Y     Z         R     G     B      A
-                    -0.5f, -0.5f, 0.0f,    1.0f, 0.0f, 0.0f, 1.0f,
-                    0.5f, -0.5f, 0.0f,     0.0f, 1.0f, 0.0f, 1.0f,
-                    0.0f,  0.5f, 0.0f,     0.0f, 0.0f, 1.0f, 1.0f
-            };
 
-    //4 : Instantiate Vertex Array Object, and Vertex Buffer Object
-    unsigned int VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
+    //3 : Innit Camera
+    Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
 
-    //5 : Bind Vertex Array Object
-    glBindVertexArray(VAO);
+    //4 : Innit Light
+    Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
+            glm::vec3(0.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.8f, 0.6f), 1.0f
+    );
 
-    //6 : Bind Vertex Array Object
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    //7 : Attribute Pointer for Position (X,Y,Z)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+    //5 : Innit Model
+    Bella_GPR200::Model lamp("assets/models/lamp.zip");
 
-    //8 : Attribute Pointer for Colour (R,G,B,A)
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+
 
     //9 : Render Loop
     while (!glfwWindowShouldClose(window)) {
 
-        //9(a) : Clear the Screen
-        glClearColor(0.3f, 0.4f, 0.9f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        //Time Calculations
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
 
-        //9(b) : Instantiate Shader Uniforms
-        float timeValue = glfwGetTime();
-        ourShader.setFloat("uTime", timeValue);
+        // Clear color and depth buffers
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //9(c) : Use Shader and Bind Vertex Array to Shader
-        ourShader.use();
-        glBindVertexArray(VAO);
+        //Shader Instantiation
+        genModelShader.use();
 
-        //9(d) : Draw Call
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        // Update projection and view matrices
+        glm::mat4 projection = glm::perspective(glm::radians(cam.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = cam.GetViewMatrix();
+        genModelShader.setMat4("projection", projection);
+        genModelShader.setMat4("view", view);
 
 
-        //9(e) : Swap Buffers
+        //Lighting Instantiation
+       // pointLight.SetLightUniforms(genModelShader);
+
+        //Model Transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, -1.5f));
+        model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+        genModelShader.setMat4("model", model);
+
+        //Draw the model
+        lamp.Draw(genModelShader);
+
+        //Draw UI
+        SM.LightWindow(pointLight);
+
+        // Swap buffers and poll events
         glfwSwapBuffers(window);
         glfwPollEvents();
-
     }
 
     //10 : Terminate Program
-    printf("Shutting down...");
-    glfwTerminate();
+     SM.Terminate(window);
 
 }
