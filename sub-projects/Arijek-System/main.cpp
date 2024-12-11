@@ -1,5 +1,6 @@
 #include <iostream>
 #include "assets/Code/Scene Manager/SceneManager.h"
+#include "assets/Code/Terrain/TerrainGenerator.h"
 #include "assets/Code/User Input/UserInput.h"
 
 
@@ -20,42 +21,53 @@ float lastFrame = 0.0f;  // Time of the last frame
 SceneManager SM;
 UserInput UI;
 
+//Ung
+void DrawModel();
+
+
+//debug Statics
+
+
 int main() {
 
     //Create OpenGL Window and ImGui window
-    GLFWwindow* window = SM.InitializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Project 1 : Models");
+    GLFWwindow* window = SM.InitializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Arijek System");
     if (!window) return -1;
     SM.InitImGui(window);
 
-    // Set Up Isometric Camera
+    // OpenGL Settings
+    glEnable(GL_DEPTH_TEST);
+
+    // Set Up Camera Instances
+    Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
     Bella_GPR200::Camera isoCam(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f, true);
 
 
     // Set Up Lighting
-    Bella_GPR200::Lighting::Light dirLight = Bella_GPR200::Lighting::Light::CreateDirectional(
+     Bella_GPR200::Lighting::Light dirLight = Bella_GPR200::Lighting::Light::CreateDirectional(
         glm::vec3(-0.2f, -1.0f, -0.3f), glm::vec3(1.0f, 1.0f, 1.0f)
     );
 
     // Create a Point Light
-    Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
+     Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
         glm::vec3(10.0f, 1.0f, 2.0f), glm::vec3(1.0f, 0.8f, 0.6f), 1.0f
     );
 
     // Create a Spotlight
-    Bella_GPR200::Lighting::Light spotLight = Bella_GPR200::Lighting::Light::CreateSpotlight(
+     Bella_GPR200::Lighting::Light spotLight = Bella_GPR200::Lighting::Light::CreateSpotlight(
         glm::vec3(0.0f, 1.0f, 2.0f), glm::vec3(0.0f, -1.0f, 0.0f), 12.5f, glm::vec3(1.0f, 0.8f, 0.6f), 1.0f
     );
 
     // Initialize Shaders
-    Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
-    Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
-    Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
+     Bella_GPR200::Shader ourShader("assets/vertexShader.vert", "assets/fragmentShader.frag");
+     Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
+     Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
 
     // Initialize Models
-    Bella_GPR200::Model testModel("assets/Models/plant.fbx");
+     Bella_GPR200::Model testModel("assets/Models/plant.fbx");
 
-    // OpenGL Settings
-    glEnable(GL_DEPTH_TEST);
+    //Terrain
+    TerrainGenerator terrain(10, 0.1f, 19);
 
     // Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -84,6 +96,9 @@ int main() {
         // Lighting Instantiation
         pointLight.SetLightUniforms(genModelShader);
 
+        terrain.Render();
+
+        /*
         // Model Transformation
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, glm::vec3(10.0f, 0.0f, 0.0f));
@@ -93,8 +108,10 @@ int main() {
         // Draw the model
         testModel.Draw(genModelShader);
 
+        */
+
         // Draw UI
-        SM.LightWindow(pointLight);
+      //  SM.LightWindow(pointLight);
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);
@@ -104,3 +121,4 @@ int main() {
     // Terminate Program
     SM.Terminate(window);
 }
+
