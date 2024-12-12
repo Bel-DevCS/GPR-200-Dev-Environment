@@ -5,10 +5,11 @@
 #ifndef SCENE_H
 #define SCENE_H
 #include <vector>
+#include <string>
 
-#include "../Camera/camera.h"
 #include "./../../../ak/Camera.h"
-#include "../Model/model.h"
+// #include "../Model/model.h"
+#include <glm/glm.hpp>
 #include "GLFW/glfw3.h"
 
 namespace final_project {
@@ -23,7 +24,9 @@ public:
 private:
     void drawUI();
 
-    std::vector<Bella_GPR200::Model> mModels;
+    // TODO: Fix models not working
+    // std::vector<Bella_GPR200::Model> mModels;
+
     ak::Camera mCamera;
     GLFWwindow* mWindow = nullptr;
 
@@ -35,7 +38,7 @@ private:
     const std::string mSCENE_NAME = "Scene";
 
     glm::vec3 mClearScreenColor = glm::vec3(0.3, 0.4, 0.9);
-    auto mClearBit = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
+    int mClearBit = GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT;
 
     static void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
     static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
