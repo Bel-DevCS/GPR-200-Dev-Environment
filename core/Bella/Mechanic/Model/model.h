@@ -6,9 +6,9 @@
 
 #include <iostream>
 #include <vector>
-#include "Bella/Mechanic/Shader/shader.h"
+#include "../Shader/shader.h"
 #include "mesh.h"
-#include "Bella/Mechanic/Texture/texture.h"
+#include "../Texture/texture.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

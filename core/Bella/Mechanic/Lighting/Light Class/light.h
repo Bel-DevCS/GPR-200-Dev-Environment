@@ -5,7 +5,7 @@
 #pragma once
 
 #include "glm/glm.hpp"
-#include "Bella/Mechanic/Shader/shader.h"
+#include "../../Shader/shader.h"
 
 class Shader;
 

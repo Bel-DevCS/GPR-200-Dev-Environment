@@ -24,7 +24,7 @@ float deltaTime = 0.0f;  // Time between current frame and last frame
 float lastFrame = 0.0f;  // Time of the last frame
 
 //Global Variable for Number of cubes being drawn
-int numCubes = 20;
+const int numCubes = 20;
 
 //Global Camera object to handle inputs later
 Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
@@ -163,7 +163,7 @@ int main() {
             glfwSetInputMode(window, GLFW_CURSOR, isMouseLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
             glfwWaitEventsTimeout(0.2);
         }
-
+   
         // 6(f) : Update Projection Matrix
         projection = isPerspective
                      ? glm::perspective(glm::radians(cam.Zoom), (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, 0.1f, 1000.0f)
