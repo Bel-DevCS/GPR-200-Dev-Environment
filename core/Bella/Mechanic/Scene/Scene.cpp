@@ -6,8 +6,6 @@
 
 #include <glm/ext/matrix_clip_space.hpp>
 
-#include "../../Definitions/Shapes/Vertex/drawShape.h"
-
 namespace final_project {
     Scene::Scene() {
         // TODO: Implement

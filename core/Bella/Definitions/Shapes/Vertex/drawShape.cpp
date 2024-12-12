@@ -4,7 +4,7 @@
 
 #include "drawShape.h"
 
-
+#include "../../../../ew/external/glad.h"
 namespace Bella_GPR200
 {
     unsigned int DrawShape::Triangle()

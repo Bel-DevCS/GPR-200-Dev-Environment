@@ -8,6 +8,5 @@ int main() {
     scene.initialize();
     scene.play();
 
-
     return 0;
 }

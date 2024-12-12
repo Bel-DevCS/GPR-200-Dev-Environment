@@ -7,10 +7,9 @@
 #include <vector>
 #include <string>
 
+#include "../../Definitions/Shapes/Vertex/drawShape.h"
 #include "./../../../ak/Camera.h"
 // #include "../Model/model.h"
-#include <glm/glm.hpp>
-#include "GLFW/glfw3.h"
 
 namespace final_project {
 
