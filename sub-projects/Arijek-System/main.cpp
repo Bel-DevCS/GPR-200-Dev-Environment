@@ -67,7 +67,7 @@ int main() {
      Bella_GPR200::Model testModel("assets/Models/plant.fbx");
 
     //Terrain
-    TerrainGenerator terrain(10, 0.1f, 19);
+    TerrainGenerator terrain(10, 5.0f, 7);
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
         {

@@ -18,6 +18,9 @@ private:
     float scale;
     int seed;
 
+    float minHeight;
+    float maxHeight;
+
     unsigned int VAO, VBO, EBO;
     Bella_GPR200::Shader NoiseShader;
 
