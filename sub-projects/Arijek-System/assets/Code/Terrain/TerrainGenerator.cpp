@@ -23,69 +23,67 @@ float TerrainGenerator::GenerateNoise(int x, int z) {
 }
 
 // Generate terrain mesh directly (centered)
-std::vector<float> TerrainGenerator::GenerateMesh() {
+std::vector<float> TerrainGenerator::GenerateVertices() {
     std::vector<float> vertices;
-    float halfGridSize = static_cast<float>(gridSize) / 2.0f;
+
+
+    for (int x = 0; x < gridSize; ++x) {
+        for (int z = 0; z < gridSize; ++z) {
+            float height = GenerateNoise(x, z);
+            vertices.push_back(x);
+            vertices.push_back(height);
+            vertices.push_back(z);
+        }
+    }
+    return vertices;
+}
+
+std::vector<unsigned int> TerrainGenerator::GenerateIndices()
+{
+    std::vector<unsigned int> indices;
 
     for (int x = 0; x < gridSize - 1; ++x) {
         for (int z = 0; z < gridSize - 1; ++z) {
-            float offsetX = x - halfGridSize;
-            float offsetZ = z - halfGridSize;
+            unsigned int i = x + z * gridSize;
+            indices.push_back(i);
+            indices.push_back(i + 1);
+            indices.push_back(i + gridSize);
 
-            float h1 = GenerateNoise(x, z);
-            float h2 = GenerateNoise(x + 1, z);
-            float h3 = GenerateNoise(x, z + 1);
-            float h4 = GenerateNoise(x + 1, z + 1);
-
-            // First triangle (centered vertices)
-            vertices.push_back(offsetX);
-            vertices.push_back(h1);
-            vertices.push_back(offsetZ);
-
-            vertices.push_back(offsetX + 1.0f);
-            vertices.push_back(h2);
-            vertices.push_back(offsetZ);
-
-            vertices.push_back(offsetX);
-            vertices.push_back(h3);
-            vertices.push_back(offsetZ + 1.0f);
-
-            // Second triangle (centered vertices)
-            vertices.push_back(offsetX + 1.0f);
-            vertices.push_back(h2);
-            vertices.push_back(offsetZ);
-
-            vertices.push_back(offsetX + 1.0f);
-            vertices.push_back(h4);
-            vertices.push_back(offsetZ + 1.0f);
-
-            vertices.push_back(offsetX);
-            vertices.push_back(h3);
-            vertices.push_back(offsetZ + 1.0f);
+            indices.push_back(i + 1);
+            indices.push_back(i + gridSize + 1);
+            indices.push_back(i + gridSize);
         }
     }
 
-    return vertices;
+    return indices;
 }
-// Render terrain
+
 void TerrainGenerator::Render(Bella_GPR200::Camera& camera, int width, int height) {
+
+    std::vector<float> vertices = GenerateVertices();
+    std::vector<unsigned int> indices = GenerateIndices();
+
     if (VAO == 0) {
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
 
         glBindVertexArray(VAO);
+
+        // Bind vertex buffer
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-        std::vector<float> mesh = GenerateMesh();
-        glBufferData(GL_ARRAY_BUFFER, mesh.size() * sizeof(float), mesh.data(), GL_STATIC_DRAW);
-
+        std::vector<float> vertices = GenerateVertices();
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
+        // Bind index buffer
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        std::vector<unsigned int> indices = GenerateIndices();
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-
-        std::cout << "num vertices : " << mesh.size() << std::endl;
     }
 
     glBindVertexArray(VAO);
@@ -99,6 +97,6 @@ void TerrainGenerator::Render(Bella_GPR200::Camera& camera, int width, int heigh
     NoiseShader.setMat4("model", model);
     NoiseShader.setMat4("view", view);
     NoiseShader.setMat4("projection", projection);
-    glDrawArrays(GL_TRIANGLES, 0, gridSize * gridSize * 6);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }

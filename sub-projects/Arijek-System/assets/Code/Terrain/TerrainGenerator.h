@@ -16,7 +16,8 @@ public:
     TerrainGenerator(int gridSize, float scale, int seed);
 
     // Generate terrain mesh directly
-    std::vector<float> GenerateMesh();
+    std::vector<float> GenerateVertices();
+    std::vector<unsigned int> GenerateIndices();
 
     // Render the terrain
     void Render(Bella_GPR200::Camera& camera, int width, int height);
@@ -26,7 +27,7 @@ private:
     float scale;        // Noise scale
     int seed;           // Seed for consistent results
 
-    unsigned int VAO, VBO; // OpenGL buffers
+    unsigned int VAO, VBO, EBO; // OpenGL buffers
 
     Bella_GPR200::Shader NoiseShader;
 
