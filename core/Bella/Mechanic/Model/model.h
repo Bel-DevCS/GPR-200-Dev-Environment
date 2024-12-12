@@ -27,6 +27,12 @@ namespace Bella_GPR200
 
         Shader& getShader() { return mShader; }
 
+        void setPosition(glm::vec3 position) { mPosition = position; }
+        glm::vec3 getPosition() { return mPosition; }
+
+        void setScale(glm::vec3 scale) { mScale = scale; }
+        glm::vec3 getScale() { return mScale; }
+
     private:
         std::vector<Mesh> meshes;
         std::string directory;

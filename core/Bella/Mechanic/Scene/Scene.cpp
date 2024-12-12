@@ -15,6 +15,7 @@ namespace final_project {
     void Scene::play() {
         float deltaTime, lastFrame = 0;
 
+        // Normal scene loop
         while (!glfwWindowShouldClose(mWindow)) {
             glfwPollEvents();
 
@@ -30,13 +31,17 @@ namespace final_project {
             auto view = mCamera.getView();
             auto projection = glm::perspective(glm::radians(mCamera.getZoom()), float(SCREEN_WIDTH) / float (SCREEN_HEIGHT), NEAR_PLANE, FAR_PLANE);
 
+            // Draw call on all models
             for (auto& model : mModels) {
                 model.getShader().use();
 
                 model.getShader().setMat4("view", view);
                 model.getShader().setMat4("projection", projection);
 
-                mLight.SetLightUniforms(model.getShader());
+                // Set lighting onto models for each light in the scene
+                for (auto& light : mLights) {
+                    light.SetLightUniforms(model.getShader());
+                }
 
                 model.Draw();
             }

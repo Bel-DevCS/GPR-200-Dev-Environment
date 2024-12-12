@@ -7,6 +7,8 @@ final_project::Scene scene;
 Bella_GPR200::Shader genModelShader("./assets/genericModel.vert", "./assets/genericModel.frag");
 Bella_GPR200::Model testModel("./assets/Models/plant.fbx", genModelShader);
 
+Bella_GPR200::Model modelTwo("./assets/Models/plant.fbx", genModelShader);
+
 
 // Create a Point Light
 Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::CreatePoint(
@@ -14,8 +16,11 @@ Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::Create
 );
 
 int main() {
+    testModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
+
     scene.addModel(testModel);
-    scene.setLight(pointLight);
+    scene.addModel(modelTwo);
+    scene.addLight(pointLight);
 
     scene.play();
 
