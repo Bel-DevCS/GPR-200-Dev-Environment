@@ -29,12 +29,10 @@ namespace final_project {
             auto view = mCamera.getView();
             auto projection = glm::perspective(glm::radians(mCamera.getZoom()), float(SCREEN_WIDTH) / float (SCREEN_HEIGHT), NEAR_PLANE, FAR_PLANE);
 
-            /*
+
             for (auto& model : mModels) {
-                // TODO: Draw all models from here
-                // model.Draw();
+                model.Draw();
             }
-            */
 
             drawUI();
 

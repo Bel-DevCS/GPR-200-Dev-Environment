@@ -8,7 +8,7 @@
 
 namespace Bella_GPR200
 {
-    void Model::Draw(Shader& shader)
+    void Model::Draw()
     {
         for (unsigned int i = 0; i < meshes.size(); i++)
         {
@@ -16,26 +16,26 @@ namespace Bella_GPR200
             if (meshes[i].textures.empty())
             {
                 // If no textures, use material color
-                shader.setBool("useTexture", false);
+                mShader.setBool("useTexture", false);
                 // Set a default material color for now
-                shader.setVec3("materialColor", glm::vec3(0.5f, 0.5f, 0.5f)); // Example color
+                mShader.setVec3("materialColor", glm::vec3(0.5f, 0.5f, 0.5f)); // Example color
             }
             else
             {
                 // If textures are present, use them
-                shader.setBool("useTexture", true);
+                mShader.setBool("useTexture", true);
                 for (unsigned int j = 0; j < meshes[i].textures.size(); j++)
                 {
                     std::string number;
                     std::string name = meshes[i].textures[j].type;
                     if (name == "texture_diffuse")
                         number = "1";  // Assuming one diffuse texture for now
-                    shader.setInt((name + number).c_str(), j);
+                    mShader.setInt((name + number).c_str(), j);
                     glActiveTexture(GL_TEXTURE0 + j); // Activate texture unit
                     glBindTexture(GL_TEXTURE_2D, meshes[i].textures[j].id);
                 }
             }
-            meshes[i].Draw(shader);
+            meshes[i].Draw(mShader);
         }
     }
 
