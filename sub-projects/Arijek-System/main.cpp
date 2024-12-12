@@ -9,6 +9,7 @@
 #include "Bella/Mechanic/Model/mesh.h"
 #include "Bella/Mechanic/Model/model.h"
 #include "Bella/Mechanic/Lighting/Light Class/light.h"
+#include "Bella/Mechanic/Particle/ParticleSystem/ParticleSystem.h"
 
 
 //Global Variables
@@ -20,12 +21,6 @@ float lastFrame = 0.0f;  // Time of the last frame
 //Managers
 SceneManager SM;
 UserInput UI;
-
-//Ung
-void DrawModel();
-
-
-//debug Statics
 
 
 int main() {
@@ -63,11 +58,30 @@ int main() {
      Bella_GPR200::Shader genModelShader("assets/Shaders/Generic/genericModel.vert", "assets/Shaders/Generic/genericModel.frag");
      Bella_GPR200::Shader pixelShader("assets/Shaders/Pixel Shader/pixelVert.vert", "assets/Shaders/Pixel Shader/pixelFrag.frag");
 
+    //Particles
+    Bella_GPR200::Shader snowShader("assets/Shaders/Particles/Snow/SnowVert.vert", "assets/Shaders/Particles/Snow/SnowFrag.frag");
+
     // Initialize Models
      Bella_GPR200::Model testModel("assets/Models/plant.fbx");
 
     //Terrain
     TerrainGenerator terrain(10, 5.0f, 7);
+
+    //Particle System
+    Bella_GPR200::ParticleSystem snowSystem(1000, snowShader);
+
+    Bella_GPR200::ParticleConfig snowConfig;
+    snowConfig.velocityMin = glm::vec3(-0.1f, -0.5f, -0.1f);
+    snowConfig.velocityMax = glm::vec3(0.1f, -0.5f, 0.1f);
+    snowConfig.colorStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    snowConfig.colorEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
+    snowConfig.lifespanMin = 5.0f;
+    snowConfig.lifespanMax = 7.0f;
+    snowConfig.sizeMin = 0.05f;
+    snowConfig.sizeMax = 0.1f;
+
+    snowSystem.SetConfig(snowConfig);
+
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
         {
@@ -102,6 +116,9 @@ int main() {
         pointLight.SetLightUniforms(genModelShader);
 
         terrain.Render(cam, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        snowSystem.Update(deltaTime, glm::vec3(0.0f, 10.0f, 0.0f)); // Snowfall from above
+        snowSystem.Render(view, projection);
 
         /*
         // Model Transformation

@@ -23,6 +23,10 @@ add_library(core STATIC ${CORE_SRC} ${CORE_INC}
         Bella/Definitions/Shapes/Vertex/drawShape.h
         Bella/Definitions/Colours/definitionColours.h
         Bella/Mechanic/Camera/camera.h
+        Bella/Mechanic/Particle/Particle.cpp
+        Bella/Mechanic/Particle/Particle.h
+        Bella/Mechanic/Particle/ParticleSystem/ParticleSystem.cpp
+        Bella/Mechanic/Particle/ParticleSystem/ParticleSystem.h
 )
 
 find_package(OpenGL REQUIRED)
