@@ -12,9 +12,43 @@ namespace Bella_GPR200
         updateCameraVectors();
     }
 
+    Camera::Camera(glm::vec3 position, glm::vec3 up, float orthoSize, bool isIsometric)
+       : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(2.5f), MouseSensitivity(0.1f), Zoom(10.0f), OrthoSize(orthoSize), IsIsometric(isIsometric)
+    {
+        if (isIsometric)
+        {
+            Position = glm::vec3(10.0f, 10.0f, 10.0f); // Default isometric position
+            Yaw = -45.0f;
+            Pitch = -35.26f;
+        }
+        else
+        {
+            Position = position;
+            Yaw = -90.0f;
+            Pitch = 0.0f;
+        }
+
+        WorldUp = up;
+        updateCameraVectors();
+    }
+
+
     glm::mat4 Camera::GetViewMatrix()
     {
         return glm::lookAt(Position, Position + Front, Up);
+    }
+
+    glm::mat4 Camera::GetProjectionMatrix(float aspectRatio)
+    {
+        if (IsIsometric)
+        {
+            float halfSize = OrthoSize / 2.0f;
+            return glm::ortho(-halfSize * aspectRatio, halfSize * aspectRatio, -halfSize, halfSize, 0.1f, 100.0f);
+        }
+        else
+        {
+            return glm::perspective(glm::radians(Zoom), aspectRatio, 0.1f, 100.0f);
+        }
     }
 
     // Renamed to KeyboardInput

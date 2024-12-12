@@ -1,3 +1,5 @@
+#pragma once
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -39,8 +41,16 @@ namespace Bella_GPR200
                glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
                float yaw = -90.0f, float pitch = 0.0f);
 
+        //Iso Constructor
+        Camera(glm::vec3 position,
+              glm::vec3 up,
+              float orthoSize = 10.0f,
+              bool isIsometric = false);
+
         // Returns the view matrix calculated using LookAt matrix
         glm::mat4 GetViewMatrix();
+
+        glm::mat4 GetProjectionMatrix(float aspectRatio);
 
         // Renamed input functions for clarity
         void KeyboardInput(Camera_Movement direction, float deltaTime);
@@ -50,7 +60,9 @@ namespace Bella_GPR200
         void updateCameraVectors();
 
     private:
-        // Updates the camera vectors based on the current values of Yaw and Pitch
+        // Isometric-specific
+        bool IsIsometric = false;
+        float OrthoSize = 10.0f;
 
     };
 
