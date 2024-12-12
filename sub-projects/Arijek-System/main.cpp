@@ -62,7 +62,7 @@ int main() {
     Bella_GPR200::Shader snowShader("assets/Shaders/Particles/Snow/SnowVert.vert", "assets/Shaders/Particles/Snow/SnowFrag.frag");
 
     // Initialize Models
-     Bella_GPR200::Model testModel("assets/Models/plant.fbx");
+     Bella_GPR200::Model testModel("assets/Models/plant.fbx", genModelShader);
 
     //Terrain
     TerrainGenerator terrain(10, 5.0f, 7);
@@ -90,6 +90,8 @@ int main() {
         {
       glViewport(0, 0, width, height);
         });
+
+    snowSystem.setPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 
     // Render Loop
     while (!glfwWindowShouldClose(window)) {
@@ -120,7 +122,7 @@ int main() {
 
         terrain.Render(cam, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        snowSystem.Update(deltaTime, glm::vec3(0.0f, 10.0f, 0.0f), terrainWidth, terrainDepth);
+        snowSystem.Update(deltaTime, terrainWidth, terrainDepth);
         snowSystem.Render(view, projection);
 
         /*

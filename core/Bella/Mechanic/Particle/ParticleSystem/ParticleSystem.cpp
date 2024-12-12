@@ -33,7 +33,7 @@ namespace Bella_GPR200
     }
 
     // Update particles and respawn inactive ones
-    void ParticleSystem::Update(float deltaTime, const glm::vec3& emitterPosition, float terrainWidth, float terrainDepth) {
+    void ParticleSystem::Update(float deltaTime, float terrainWidth, float terrainDepth) {
         for (auto& particle : particles) {
             particle.Update(deltaTime); // Update particle state
 
@@ -42,7 +42,7 @@ namespace Bella_GPR200
                 float xOffset = static_cast<float>(rand()) / RAND_MAX * terrainWidth - terrainWidth / 2.0f;
                 float zOffset = static_cast<float>(rand()) / RAND_MAX * terrainDepth - terrainDepth / 2.0f;
 
-                glm::vec3 position = emitterPosition + glm::vec3(xOffset, 0.0f, zOffset);
+                glm::vec3 position = mPosition + glm::vec3(xOffset, 0.0f, zOffset);
                 SpawnParticle(position); // Respawn particle
             }
         }

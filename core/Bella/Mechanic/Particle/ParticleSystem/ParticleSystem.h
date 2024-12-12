@@ -16,13 +16,16 @@ namespace Bella_GPR200 {
         void SetConfig(const ParticleConfig& config);
 
         // Update particles based on time and terrain bounds
-        void Update(float deltaTime, const glm::vec3& emitterPosition, float terrainWidth, float terrainDepth);
+        void Update(float deltaTime, float terrainWidth, float terrainDepth);
 
         // Render all active particles
         void Render(const glm::mat4& view, const glm::mat4& projection);
 
         // Spawn a new particle at a specific position
         void SpawnParticle(const glm::vec3& position);
+
+        // set the position of the particle emitter
+        void setPosition(glm::vec3 position) { mPosition = position; }
 
     private:
         std::vector<Particle> particles; // Pool of particles
@@ -32,6 +35,7 @@ namespace Bella_GPR200 {
 
         unsigned int VAO, VBO;           // OpenGL buffers for the particle quad
 
+        glm::vec3 mPosition;             // Emitter Position
         size_t FindUnusedParticle();     // Find an unused particle in the pool
         void InitializeBuffers();        // Initialize OpenGL buffers for rendering
         glm::vec3 RandomVector(const glm::vec3& min, const glm::vec3& max); // Generate random vector within a range

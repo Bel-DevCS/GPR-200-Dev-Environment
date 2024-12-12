@@ -46,6 +46,11 @@ namespace final_project {
                 model.Draw();
             }
 
+            for (auto& particleGenerator : mParticleGenerators) {
+                particleGenerator.Update(deltaTime, 50, 50);
+                particleGenerator.Render(view, projection);
+            }
+
             drawUI();
 
             glfwSwapBuffers(mWindow);

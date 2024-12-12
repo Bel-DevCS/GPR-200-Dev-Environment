@@ -11,6 +11,7 @@
 #include "./../../../ak/Camera.h"
 #include "../Model/model.h"
 #include "../Lighting/Light Class/light.h"
+#include "../Particle/ParticleSystem/ParticleSystem.h"
 
 namespace final_project {
 
@@ -26,6 +27,8 @@ public:
     // Add a light source to the scene
     void addLight(Bella_GPR200::Lighting::Light& light) { mLights.push_back(light); }
 
+    void addParticleGenerator(Bella_GPR200::ParticleSystem& generator) { mParticleGenerators.push_back(generator); }
+
 private:
     // Initialize OpenGL and the scene Window
     void initialize();
@@ -38,6 +41,9 @@ private:
 
     // Container for all lights within the scene
     std::vector<Bella_GPR200::Lighting::Light> mLights;
+
+    // Container for all particle generators in a scene
+    std::vector<Bella_GPR200::ParticleSystem> mParticleGenerators;
 
     // The scene's camera
     ak::Camera mCamera;
