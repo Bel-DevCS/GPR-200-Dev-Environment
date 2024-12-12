@@ -5,11 +5,18 @@
 #include "model.h"
 
 #include "../../../../cmake-build-debug/_deps/assimp-build/include/assimp/config.h"
+#include "glm/ext/matrix_transform.hpp"
 
 namespace Bella_GPR200
 {
     void Model::Draw()
     {
+        // send model to shader
+        glm::mat4 model = glm::mat4 (1.0f);
+        model = glm::translate(model, mPosition);
+        model = glm::scale(model, mScale);
+        mShader.setMat4("model", model);
+
         for (unsigned int i = 0; i < meshes.size(); i++)
         {
             // Check if the mesh has textures

@@ -31,6 +31,9 @@ namespace Bella_GPR200
         std::vector<Mesh> meshes;
         std::string directory;
 
+        glm::vec3 mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 mScale = glm::vec3(1.0f, 1.0f, 1.0f);
+
         void loadModel(std::string path);
         void processNode(aiNode *node, const aiScene *scene);
         Mesh processMesh(aiMesh *mesh, const aiScene *scene);

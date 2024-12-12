@@ -8,8 +8,6 @@
 #define MAX_ZOOM 1.0f
 #define MIN_ZOOM 120.0f
 
-
-
 namespace ak {
 
 class Camera {
