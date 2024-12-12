@@ -4,6 +4,8 @@
 
 #include "Scene.h"
 
+#include "../../Definitions/Shapes/Vertex/drawShape.h"
+
 namespace final_project {
     Scene::Scene() {
         // TODO: Implement
@@ -32,6 +34,8 @@ namespace final_project {
                 // TODO: Draw all models from here
                 // model.Draw();
             }
+
+            Bella_GPR200::DrawShape::Cube();
 
             drawUI();
 
