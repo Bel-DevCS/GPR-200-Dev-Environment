@@ -20,7 +20,7 @@ const int SCREEN_HEIGHT = 720;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-int numCubes = 20;
+const int numCubes = 20;
 float bounce = 0.5f;
 
 Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
