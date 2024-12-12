@@ -25,7 +25,9 @@ namespace Bella_GPR200
 
         void Draw();
 
-        private:
+        Shader& getShader() { return mShader; }
+
+    private:
         std::vector<Mesh> meshes;
         std::string directory;
 
@@ -39,7 +41,7 @@ namespace Bella_GPR200
         std::vector<Texture> textures_loaded;
 
         Shader mShader;
-        Shader& getShader() { return mShader; }
+
         void setShader(Shader& shader) { mShader = shader; }
 
         unsigned int GenerateTexture(const char* path, const std::string& directory);

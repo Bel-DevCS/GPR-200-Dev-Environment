@@ -21,6 +21,8 @@ public:
     void play();
     void initialize();
 
+    void addModel(Bella_GPR200::Model& model) { mModels.push_back(model); }
+
 private:
     void drawUI();
     std::vector<Bella_GPR200::Model> mModels;

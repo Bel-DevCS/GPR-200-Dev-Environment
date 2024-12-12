@@ -9,6 +9,7 @@
 namespace final_project {
     Scene::Scene() {
         // Does this need any implementation? I dont actually think anything needs to happen here
+        initialize();
     }
 
     void Scene::play() {
@@ -31,6 +32,8 @@ namespace final_project {
 
 
             for (auto& model : mModels) {
+                model.getShader().setMat4("view", view);
+                model.getShader().setMat4("projection", projection);
                 model.Draw();
             }
 
