@@ -32,8 +32,12 @@ namespace final_project {
 
             for (auto& model : mModels) {
                 model.getShader().use();
+
                 model.getShader().setMat4("view", view);
                 model.getShader().setMat4("projection", projection);
+
+                mLight.SetLightUniforms(model.getShader());
+
                 model.Draw();
             }
 

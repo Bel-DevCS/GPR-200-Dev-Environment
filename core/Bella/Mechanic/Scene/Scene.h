@@ -7,10 +7,10 @@
 #include <vector>
 #include <string>
 
-
-#include "../../Definitions/Shapes/Vertex/drawShape.h"
+#include "../../../ew/external/glad.h"
 #include "./../../../ak/Camera.h"
 #include "../Model/model.h"
+#include "../Lighting/Light Class/light.h"
 
 namespace final_project {
 
@@ -22,10 +22,14 @@ public:
     void initialize();
 
     void addModel(Bella_GPR200::Model& model) { mModels.push_back(model); }
+    void setLight(Bella_GPR200::Lighting::Light& light) { mLight = light; }
 
 private:
     void drawUI();
     std::vector<Bella_GPR200::Model> mModels;
+    std::vector<Bella_GPR200::Lighting::Light> mLights;
+
+    Bella_GPR200::Lighting::Light mLight;
 
     ak::Camera mCamera;
     GLFWwindow* mWindow = nullptr;
