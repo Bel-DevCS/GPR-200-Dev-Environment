@@ -8,13 +8,12 @@
 
 namespace final_project {
     Scene::Scene() {
-        // TODO: Implement
+        // Does this need any implementation? I dont actually think anything needs to happen here
     }
 
     void Scene::play() {
         float deltaTime, lastFrame = 0;
 
-        // TODO: Implement
         while (!glfwWindowShouldClose(mWindow)) {
             glfwPollEvents();
 
@@ -36,8 +35,6 @@ namespace final_project {
                 // model.Draw();
             }
             */
-
-            Bella_GPR200::DrawShape::Cube();
 
             drawUI();
 
