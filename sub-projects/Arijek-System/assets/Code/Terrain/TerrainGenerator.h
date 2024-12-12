@@ -26,6 +26,8 @@ private:
 
     float GenerateNoise(int x, int z);
     void InitializeBuffers();
+
+    void SmoothHeightMap(std::vector<std::vector<float>>& heightMap);
 };
 
 #endif
