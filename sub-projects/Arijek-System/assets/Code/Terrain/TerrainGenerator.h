@@ -1,37 +1,31 @@
-//
-// Created by Kearura on 2024-12-11.
-//
+#ifndef TERRAIN_GENERATOR_H
+#define TERRAIN_GENERATOR_H
 
-#pragma once
 #include "Bella/Mechanic/Shader/shader.h"
-
-#include <vector>
-
 #include "Bella/Mechanic/Camera/camera.h"
 #include "ew/external/glad.h"
+#include <vector>
+
 class TerrainGenerator
 {
 public:
-    // Constructor
     TerrainGenerator(int gridSize, float scale, int seed);
 
-    // Generate terrain mesh directly
-    std::vector<float> GenerateVertices();
-    std::vector<unsigned int> GenerateIndices();
-
-    // Render the terrain
     void Render(Bella_GPR200::Camera& camera, int width, int height);
 
 private:
-    int gridSize;       // Size of the grid
-    float scale;        // Noise scale
-    int seed;           // Seed for consistent results
+    int gridSize;
+    float scale;
+    int seed;
 
-    unsigned int VAO, VBO, EBO; // OpenGL buffers
-
+    unsigned int VAO, VBO, EBO;
     Bella_GPR200::Shader NoiseShader;
 
-    // Noise generation
+    std::vector<float> vertices;
+    std::vector<unsigned int> indices;
+
     float GenerateNoise(int x, int z);
+    void InitializeBuffers();
 };
 
+#endif
