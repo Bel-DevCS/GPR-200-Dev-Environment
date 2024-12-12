@@ -69,6 +69,11 @@ int main() {
     //Terrain
     TerrainGenerator terrain(10, 0.1f, 19);
 
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
+        {
+      glViewport(0, 0, width, height);
+        });
+
     // Render Loop
     while (!glfwWindowShouldClose(window)) {
 
@@ -78,7 +83,7 @@ int main() {
         lastFrame = currentFrame;
 
         // Process input
-        UI.processInput(window, isoCam, deltaTime);
+        UI.processInput(window, cam, deltaTime);
 
         // Clear color and depth buffers
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
@@ -88,15 +93,15 @@ int main() {
         genModelShader.use();
 
         // Update projection and view matrices
-        glm::mat4 projection = isoCam.GetProjectionMatrix((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
-        glm::mat4 view = isoCam.GetViewMatrix();
+        glm::mat4 projection = cam.GetProjectionMatrix((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT);
+        glm::mat4 view = cam.GetViewMatrix();
         genModelShader.setMat4("projection", projection);
         genModelShader.setMat4("view", view);
 
         // Lighting Instantiation
         pointLight.SetLightUniforms(genModelShader);
 
-        terrain.Render();
+        terrain.Render(cam, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         /*
         // Model Transformation
@@ -121,4 +126,3 @@ int main() {
     // Terminate Program
     SM.Terminate(window);
 }
-

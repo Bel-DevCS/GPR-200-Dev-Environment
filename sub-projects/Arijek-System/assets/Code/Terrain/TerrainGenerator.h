@@ -6,6 +6,8 @@
 #include "Bella/Mechanic/Shader/shader.h"
 
 #include <vector>
+
+#include "Bella/Mechanic/Camera/camera.h"
 #include "ew/external/glad.h"
 class TerrainGenerator
 {
@@ -17,7 +19,7 @@ public:
     std::vector<float> GenerateMesh();
 
     // Render the terrain
-    void Render();
+    void Render(Bella_GPR200::Camera& camera, int width, int height);
 
 private:
     int gridSize;       // Size of the grid
