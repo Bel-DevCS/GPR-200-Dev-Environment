@@ -7,10 +7,10 @@
 #include "glm/glm.hpp"
 #include "../../Shader/shader.h"
 
-class Shader;
-
 namespace Bella_GPR200
 {
+    class Shader;
+
     namespace Lighting
     {
         enum class LightType

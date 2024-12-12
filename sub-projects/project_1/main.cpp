@@ -53,7 +53,7 @@ int main() {
    // Bella_GPR200::Shader testShader("assets/Shaders/Test Shaders/testShaderVertex.vert", "assets/Shaders/Test Shaders/testShaderFragment.frag");
 
     //Initilize Models
-    Bella_GPR200::Model testModel("assets/Models/plant.fbx");
+    Bella_GPR200::Model testModel("assets/Models/plant.fbx", genModelShader);
 
     //OpenGL Settings
     glEnable(GL_DEPTH_TEST);
@@ -93,7 +93,7 @@ int main() {
         genModelShader.setMat4("model", model);
 
         //Draw the model
-        testModel.Draw(genModelShader);
+        testModel.Draw();
 
         //Draw UI
         SM.LightWindow(pointLight);
