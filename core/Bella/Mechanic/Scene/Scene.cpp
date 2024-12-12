@@ -30,8 +30,8 @@ namespace final_project {
             auto view = mCamera.getView();
             auto projection = glm::perspective(glm::radians(mCamera.getZoom()), float(SCREEN_WIDTH) / float (SCREEN_HEIGHT), NEAR_PLANE, FAR_PLANE);
 
-
             for (auto& model : mModels) {
+                model.getShader().use();
                 model.getShader().setMat4("view", view);
                 model.getShader().setMat4("projection", projection);
                 model.Draw();

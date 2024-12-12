@@ -30,8 +30,6 @@ namespace Bella_GPR200 {
             std::cerr << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " << filePath << std::endl;
         }
 
-        std::cout << "Successfully read file\n";
-
         // Convert the stream buffer to a string and return it
         return shaderStream.str();
     }
