@@ -21,13 +21,18 @@ namespace Bella_GPR200
     {
         public:
 
-        explicit Model(const char *path) { loadModel(path); }
+        explicit Model(const char *path, Shader& shader) : mShader(shader) { loadModel(path); }
 
-        void Draw(Shader &shader);
+        void Draw();
 
-        private:
+        Shader& getShader() { return mShader; }
+
+    private:
         std::vector<Mesh> meshes;
         std::string directory;
+
+        glm::vec3 mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+        glm::vec3 mScale = glm::vec3(1.0f, 1.0f, 1.0f);
 
         void loadModel(std::string path);
         void processNode(aiNode *node, const aiScene *scene);
@@ -37,6 +42,10 @@ namespace Bella_GPR200
         (aiMaterial *mat, aiTextureType type, std::string typeName);
 
         std::vector<Texture> textures_loaded;
+
+        Shader mShader;
+
+        void setShader(Shader& shader) { mShader = shader; }
 
         unsigned int GenerateTexture(const char* path, const std::string& directory);
     };

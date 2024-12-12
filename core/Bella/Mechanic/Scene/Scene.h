@@ -10,7 +10,7 @@
 
 #include "../../Definitions/Shapes/Vertex/drawShape.h"
 #include "./../../../ak/Camera.h"
-// #include "../Model/model.h"
+#include "../Model/model.h"
 
 namespace final_project {
 
@@ -21,11 +21,11 @@ public:
     void play();
     void initialize();
 
+    void addModel(Bella_GPR200::Model& model) { mModels.push_back(model); }
+
 private:
     void drawUI();
-
-    // TODO: Fix models not working
-    // std::vector<Bella_GPR200::Model> mModels;
+    std::vector<Bella_GPR200::Model> mModels;
 
     ak::Camera mCamera;
     GLFWwindow* mWindow = nullptr;

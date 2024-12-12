@@ -9,6 +9,7 @@
 namespace final_project {
     Scene::Scene() {
         // Does this need any implementation? I dont actually think anything needs to happen here
+        initialize();
     }
 
     void Scene::play() {
@@ -29,12 +30,12 @@ namespace final_project {
             auto view = mCamera.getView();
             auto projection = glm::perspective(glm::radians(mCamera.getZoom()), float(SCREEN_WIDTH) / float (SCREEN_HEIGHT), NEAR_PLANE, FAR_PLANE);
 
-            /*
             for (auto& model : mModels) {
-                // TODO: Draw all models from here
-                // model.Draw();
+                model.getShader().use();
+                model.getShader().setMat4("view", view);
+                model.getShader().setMat4("projection", projection);
+                model.Draw();
             }
-            */
 
             drawUI();
 
