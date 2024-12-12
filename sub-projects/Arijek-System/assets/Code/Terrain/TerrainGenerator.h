@@ -13,6 +13,15 @@ public:
 
     void Render(Bella_GPR200::Camera& camera, int width, int height);
 
+    int GetGridSize() const
+    {
+        return gridSize;
+    }
+
+    float GetScale() const {
+        return scale;
+    }
+
 private:
     int gridSize;
     float scale;

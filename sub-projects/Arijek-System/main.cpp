@@ -82,6 +82,9 @@ int main() {
 
     snowSystem.SetConfig(snowConfig);
 
+    float terrainWidth = terrain.GetGridSize() * terrain.GetScale();
+    float terrainDepth = terrain.GetGridSize() * terrain.GetScale();
+
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height)
         {
@@ -117,7 +120,7 @@ int main() {
 
         terrain.Render(cam, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        snowSystem.Update(deltaTime, glm::vec3(0.0f, 10.0f, 0.0f)); // Snowfall from above
+        snowSystem.Update(deltaTime, glm::vec3(0.0f, 10.0f, 0.0f), terrainWidth, terrainDepth);
         snowSystem.Render(view, projection);
 
         /*

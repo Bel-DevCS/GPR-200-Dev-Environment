@@ -12,7 +12,7 @@ namespace Bella_GPR200 {
         ParticleSystem(size_t maxParticles, const Shader& shader);
 
         void SetConfig(const ParticleConfig& config); // Set system-wide configuration
-        void Update(float deltaTime, const glm::vec3& emitterPosition);
+        void Update (float deltaTime, const glm::vec3& emitterPosition, float terrainWidth, float terrainDepth);
         void Render(const glm::mat4& view, const glm::mat4& projection);
         void SpawnParticle(const glm::vec3& position);
 
