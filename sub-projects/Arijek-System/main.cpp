@@ -3,7 +3,6 @@
 #include "assets/Code/Terrain/TerrainGenerator.h"
 #include "assets/Code/User Input/UserInput.h"
 
-
 #include "Bella/Definitions/Shapes/Vertex/drawShape.h"
 #include "Bella/Mechanic/Shader/shader.h"
 #include "Bella/Mechanic/Model/mesh.h"
@@ -62,13 +61,13 @@ int main() {
     Bella_GPR200::Shader snowShader("assets/Shaders/Particles/Snow/SnowVert.vert", "assets/Shaders/Particles/Snow/SnowFrag.frag");
 
     // Initialize Models
-     //Bella_GPR200::Model testModel("assets/Models/plant.fbx");
+     Bella_GPR200::Model testModel("assets/Models/plant.fbx", genModelShader);
 
     //Terrain
     TerrainGenerator terrain(10, 5.0f, 23);
 
     //Particle System
-    Bella_GPR200::ParticleSystem snowSystem(1000, snowShader);
+    Bella_GPR200::ParticleSystem snowSystem(3000, snowShader);
 
     Bella_GPR200::ParticleConfig snowConfig;
     snowConfig.velocityMin = glm::vec3(-0.1f, -0.5f, -0.1f);
@@ -81,6 +80,7 @@ int main() {
     snowConfig.sizeMax = 0.1f;
 
     snowSystem.SetConfig(snowConfig);
+    snowSystem.setPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 
     float terrainWidth = terrain.GetGridSize() * terrain.GetScale();
     float terrainDepth = terrain.GetGridSize() * terrain.GetScale();
@@ -120,7 +120,7 @@ int main() {
 
         terrain.Render(cam, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        snowSystem.Update(deltaTime, glm::vec3(0.0f, 10.0f, 0.0f), terrainWidth, terrainDepth);
+        snowSystem.Update(deltaTime, terrainWidth, terrainDepth);
         snowSystem.Render(view, projection);
 
 

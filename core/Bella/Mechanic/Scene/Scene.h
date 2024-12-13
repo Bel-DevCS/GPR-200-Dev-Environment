@@ -11,9 +11,12 @@
 #include "./../../../ak/Camera.h"
 #include "../Model/model.h"
 #include "../Lighting/Light Class/light.h"
+#include "../Terrain/TerrainGenerator.h"
+#include "../Particle/ParticleSystem/ParticleSystem.h"
 
 namespace final_project {
 
+    // Class author: Anne
 class Scene {
 public:
     Scene();
@@ -25,6 +28,11 @@ public:
     void addModel(Bella_GPR200::Model& model) { mModels.push_back(model); }
     // Add a light source to the scene
     void addLight(Bella_GPR200::Lighting::Light& light) { mLights.push_back(light); }
+    // Add a particle particleGenerator to the scene
+    void addParticleGenerator(Bella_GPR200::ParticleSystem& particleGenerator) { mParticleGenerators.push_back(particleGenerator); }
+
+    // Set the terrain generator for the scene
+    // void setTerrain(TerrainGenerator& terrainGenerator) { mTerrainGenerator = terrainGenerator; }
 
 private:
     // Initialize OpenGL and the scene Window
@@ -38,6 +46,12 @@ private:
 
     // Container for all lights within the scene
     std::vector<Bella_GPR200::Lighting::Light> mLights;
+
+    // Container for all particle generators in a scene
+    std::vector<Bella_GPR200::ParticleSystem> mParticleGenerators;
+
+    // Terrain Generator for the scene
+    // TerrainGenerator mTerrainGenerator = TerrainGenerator(0, 0, 0);
 
     // The scene's camera
     ak::Camera mCamera;

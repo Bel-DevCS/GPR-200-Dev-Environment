@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 #include "../../Shader/shader.h"
 
+// Entire lighting class done by Bella
 namespace Bella_GPR200
 {
     class Shader;

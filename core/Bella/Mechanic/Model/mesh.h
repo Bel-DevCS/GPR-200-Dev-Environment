@@ -7,6 +7,7 @@
 
 #include "../Shader/shader.h"
 
+// Entire mesh class by Bella
 namespace Bella_GPR200
 {
     struct Vertex

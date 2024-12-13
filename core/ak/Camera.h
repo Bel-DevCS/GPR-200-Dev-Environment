@@ -10,6 +10,8 @@
 
 namespace ak {
 
+
+    // Camera Class by Anne
 class Camera {
 public:
     Camera();
@@ -18,6 +20,7 @@ public:
     void update(float deltaTime);
     void updateLocalAngles();
     glm::mat4 getView() const;
+    glm::mat4 getProjection() const;
     void setWindow(GLFWwindow* window) { mWindow = window; }
     GLFWwindow* getWindow() const { return mWindow; }
     void processMouseMovement(double xOffset, double yOffset);
