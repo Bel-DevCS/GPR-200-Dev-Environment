@@ -112,6 +112,41 @@ namespace final_project {
     void Scene::drawUI() {
         // TODO: Implement based on project specifics. Likely will not abstract functionality
 
+        ImGui_ImplGlfw_NewFrame();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui::NewFrame();
+
+        for (auto& model : mModels) {
+            if (ImGui::Begin((model.getName() + " Settings").c_str())) {
+                ImGui::SetWindowSize(ImVec2(20, 15));
+                // Temporary copies for user input
+                glm::vec3 newPosition = model.getPosition();
+                glm::vec3 newRotation = model.getRotation();
+                glm::vec3 newScale = model.getScale();
+                bool newIsVisible = model.getVisibility();
+
+                if (ImGui::InputFloat3("Position", &newPosition[0])) {
+                    model.setPosition(newPosition); // Update temporary model settings on change
+                }
+
+                if (ImGui::InputFloat3("Rotation", &newRotation[0])) {
+                    model.setRotation(newRotation); // Update temporary model settings on change
+                }
+
+                if (ImGui::InputFloat3("Scale", &newScale[0])) {
+                    model.setScale(newScale); // Update temporary model settings on change
+                }
+
+                if (ImGui::Checkbox("Visible", &newIsVisible)) {
+                    model.setVisibility(newIsVisible); // Update temporary model settings on change
+                }
+
+                ImGui::End();
+            }
+        }
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
     void Scene::scroll_callback(GLFWwindow *window, double xOffset, double yOffset) {

@@ -22,10 +22,12 @@ namespace Bella_GPR200
         public:
 
         explicit Model(const char *path, Shader& shader) : mShader(shader) { loadModel(path); }
+        explicit Model(std::string name, const char *path, Shader& shader) : mName(name), mShader(shader) { loadModel(path); }
 
         void Draw();
 
         Shader& getShader() { return mShader; }
+        void setShader(Shader& shader) { mShader = shader; }
 
         void setPosition(glm::vec3 position) { mPosition = position; }
         glm::vec3 getPosition() const { return mPosition; }
@@ -38,6 +40,8 @@ namespace Bella_GPR200
 
         void setVisibility(bool visibility) { mVisibility  = visibility; }
         bool getVisibility() const { return mVisibility ; }
+
+        std::string getName() const { return mName; }
 
     private:
         std::vector<Mesh> meshes;
@@ -60,7 +64,7 @@ namespace Bella_GPR200
 
         Shader mShader;
 
-        void setShader(Shader& shader) { mShader = shader; }
+        const std::string mName;
 
         unsigned int GenerateTexture(const char* path, const std::string& directory);
     };
