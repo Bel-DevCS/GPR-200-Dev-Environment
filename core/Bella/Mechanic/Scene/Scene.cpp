@@ -70,22 +70,26 @@ namespace final_project {
         printf("Initializing OpenGL context...");
         if (!glfwInit()) {
             printf("GLFW failed to init!");
-            return;
+            exit(1);
         }
 
         mWindow = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Final Project", nullptr, nullptr);
         if (!mWindow) {
             printf("GLFW failed to create window");
-            return;
+            exit(1);
         }
         glfwMakeContextCurrent(mWindow);
         if (!gladLoadGL(glfwGetProcAddress)) {
             printf("GLAD Failed to load GL headers");
-            return;
+            exit(1);
         }
 
         glfwSetScrollCallback(mWindow, Scene::scroll_callback);
         glfwSetCursorPosCallback(mWindow, Scene::mouse_callback);
+        glfwSetFramebufferSizeCallback(mWindow, [](GLFWwindow* window, int width, int height)
+        {
+            glViewport(0, 0, width, height);
+        });
         glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         mCamera = ak::Camera(mWindow, glm::vec3(0.0f, 0.0f, 1.0f));

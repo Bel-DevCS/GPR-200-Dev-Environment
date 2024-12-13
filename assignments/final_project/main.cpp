@@ -7,9 +7,11 @@
 final_project::Scene scene;
 
 Bella_GPR200::Shader genModelShader("./assets/Shaders/genericModel.vert", "./assets/Shaders/genericModel.frag");
-Bella_GPR200::Model testModel("./assets/Models/plant.fbx", genModelShader);
+Bella_GPR200::Model plantModel("./assets/Models/plant.fbx", genModelShader);
 
-Bella_GPR200::Model modelTwo("./assets/Models/plant.fbx", genModelShader);
+Bella_GPR200::Model cupModel("./assets/Models/teamugfbx.fbx", genModelShader);
+
+Bella_GPR200::Model catModel("./assets/Models/tree.fbx", genModelShader);
 
 
 // Create a Point Light
@@ -27,6 +29,7 @@ Bella_GPR200::ParticleConfig snowConfig;
 
 
 int main() {
+
     //Terrain
     //TerrainGenerator terrain(10, 5.0f, 23);
 
@@ -45,10 +48,17 @@ int main() {
 
     //scene.setTerrain(terrain);
 
-    testModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
+    cupModel.setScale(glm::vec3(0.15f, 0.15f, 0.15f));
+    cupModel.setRotation(glm::vec3 (0.0f, 0.0f, 90.0f));
 
-    scene.addModel(testModel);
-    scene.addModel(modelTwo);
+    catModel.setScale(glm::vec3 (0.1f, 0.1f, 0.1f));
+    catModel.setPosition(glm::vec3(-2.0f, -1.0f, -3.0f));
+
+    plantModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
+
+    scene.addModel(plantModel);
+    scene.addModel(cupModel);
+    scene.addModel(catModel);
     scene.addLight(pointLight);
 
     scene.play();

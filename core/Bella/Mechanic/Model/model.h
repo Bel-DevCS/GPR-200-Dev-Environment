@@ -33,12 +33,16 @@ namespace Bella_GPR200
         void setScale(glm::vec3 scale) { mScale = scale; }
         glm::vec3 getScale() { return mScale; }
 
+        void setRotation(glm::vec3 rotation) { mRotation = rotation; }
+        glm::vec3 getRotation() { return mRotation; }
+
     private:
         std::vector<Mesh> meshes;
         std::string directory;
 
         glm::vec3 mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 mScale = glm::vec3(1.0f, 1.0f, 1.0f);
+        glm::vec3 mRotation = glm::vec3(0.0f, 0.0f,0.0f);
 
         void loadModel(std::string path);
         void processNode(aiNode *node, const aiScene *scene);

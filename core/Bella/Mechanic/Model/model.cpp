@@ -15,6 +15,9 @@ namespace Bella_GPR200
         glm::mat4 model = glm::mat4 (1.0f);
         model = glm::translate(model, mPosition);
         model = glm::scale(model, mScale);
+        model = glm::rotate(model, glm::radians(mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
         mShader.setMat4("model", model);
 
         for (unsigned int i = 0; i < meshes.size(); i++)
