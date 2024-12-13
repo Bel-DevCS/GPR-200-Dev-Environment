@@ -20,9 +20,7 @@ add_executable(ARIJEK ${ARIJEK_SRC} ${ARIJEK_INC}
         "assets/Code/Scene Manager/SceneManager.cpp"
         "assets/Code/Scene Manager/SceneManager.h"
         "assets/Code/User Input/UserInput.cpp"
-        "assets/Code/User Input/UserInput.h"
-        assets/Code/Terrain/TerrainGenerator.cpp
-        assets/Code/Terrain/TerrainGenerator.h)
+        "assets/Code/User Input/UserInput.h")
 target_link_libraries(ARIJEK PUBLIC core IMGUI glm assimp)
 target_include_directories(ARIJEK PUBLIC ${CORE_INC_DIR} ${stb_INCLUDE_DIR} ${assimp_INCLUDE_DIRS})
 

@@ -48,9 +48,11 @@ namespace final_project {
 
             // Draw call on all particle systems
             for (auto& particleGenerator : mParticleGenerators) {
-                particleGenerator.Update(deltaTime, 50, 50);
+                particleGenerator.Update(deltaTime, mTerrainGenerator.GetGridSize() * mTerrainGenerator.GetScale(), mTerrainGenerator.GetGridSize() * mTerrainGenerator.GetScale());
                 particleGenerator.Render(view, projection);
             }
+
+            mTerrainGenerator.Render(mCamera, view, projection,SCREEN_WIDTH, SCREEN_HEIGHT);
 
             drawUI();
 

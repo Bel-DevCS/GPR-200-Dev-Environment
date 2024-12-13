@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Bella/Mechanic/Shader/shader.h"
-#include "Bella/Mechanic/Camera/camera.h"
-#include "ew/external/glad.h"
+#include "../Shader/shader.h"
+#include "../../../ak/Camera.h"
+#include "../../../ew/external/glad.h"
 #include <vector>
 
 class TerrainGenerator
@@ -12,7 +12,7 @@ public:
     TerrainGenerator(int gridSize, float scale, int seed);
 
     // Render the terrain using the provided camera and viewport dimensions
-    void Render(Bella_GPR200::Camera& camera, int width, int height);
+    void Render(ak::Camera& camera, const glm::mat4 view, const glm::mat4 projection, int width, int height);
 
     // Accessors for grid size and scale (useful for external configurations)
     int GetGridSize() const { return gridSize; }

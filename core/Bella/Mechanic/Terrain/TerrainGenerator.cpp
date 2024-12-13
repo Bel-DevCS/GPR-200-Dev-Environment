@@ -8,8 +8,8 @@
 TerrainGenerator::TerrainGenerator(int gridSize, float scale, int seed)
     : gridSize(gridSize), scale(scale), seed(seed), VAO(0), VBO(0),
       minHeight(FLT_MAX), maxHeight(FLT_MIN),
-      NoiseShader("assets/Shaders/TerrainShader/TerrainVert.vert",
-                  "assets/Shaders/TerrainShader/TerrainFrag.frag")
+      NoiseShader("./assets/Shaders/TerrainShader/TerrainVert.vert",
+                  "./assets/Shaders/TerrainShader/TerrainFrag.frag")
 {
     srand(seed); // Set random seed for consistent noise generation
 
@@ -138,9 +138,7 @@ void TerrainGenerator::InitializeBuffers() {
 }
 
 // Render the terrain with the specified camera and viewport
-void TerrainGenerator::Render(Bella_GPR200::Camera& camera, int width, int height) {
-    glm::mat4 projection = camera.GetProjectionMatrix((float)width / (float)height);
-    glm::mat4 view = camera.GetViewMatrix();
+void TerrainGenerator::Render(ak::Camera& camera, const glm::mat4 view, const glm::mat4 projection, int width, int height) {
     glm::mat4 model = glm::mat4(1.0f); // Identity matrix
 
     // Configure dynamic properties like fog and lighting
