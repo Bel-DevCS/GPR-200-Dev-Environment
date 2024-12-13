@@ -31,7 +31,7 @@ public:
     void addParticleGenerator(Bella_GPR200::ParticleSystem& particleGenerator) { mParticleGenerators.push_back(particleGenerator); }
 
     // Set the terrain generator for the scene
-    void setTerrain(TerrainGenerator& terrainGenerator) { mTerrainGenerator = terrainGenerator; }
+    // void setTerrain(TerrainGenerator& terrainGenerator) { mTerrainGenerator = terrainGenerator; }
 
 private:
     // Initialize OpenGL and the scene Window
@@ -50,7 +50,7 @@ private:
     std::vector<Bella_GPR200::ParticleSystem> mParticleGenerators;
 
     // Terrain Generator for the scene
-    TerrainGenerator mTerrainGenerator = TerrainGenerator(0, 0, 0);
+    // TerrainGenerator mTerrainGenerator = TerrainGenerator(0, 0, 0);
 
     // The scene's camera
     ak::Camera mCamera;

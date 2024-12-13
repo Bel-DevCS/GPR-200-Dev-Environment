@@ -28,14 +28,14 @@ Bella_GPR200::ParticleConfig snowConfig;
 
 int main() {
     //Terrain
-    TerrainGenerator terrain(10, 5.0f, 23);
+    //TerrainGenerator terrain(10, 5.0f, 23);
 
     snowConfig.velocityMin = glm::vec3(-0.1f, -0.5f, -0.1f);
     snowConfig.velocityMax = glm::vec3(0.1f, -0.5f, 0.1f);
     snowConfig.colorStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     snowConfig.colorEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
-    snowConfig.lifespanMin = 5.0f;
-    snowConfig.lifespanMax = 7.0f;
+    snowConfig.lifespanMin = 15.0f;
+    snowConfig.lifespanMax = 30.0f;
     snowConfig.sizeMin = 0.05f;
     snowConfig.sizeMax = 0.1f;
 
@@ -43,7 +43,7 @@ int main() {
     snowParticleGenerator.setPosition(glm::vec3 (0.0f, 10.0f, 0.0f));
     scene.addParticleGenerator(snowParticleGenerator);
 
-    scene.setTerrain(terrain);
+    //scene.setTerrain(terrain);
 
     testModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
 
