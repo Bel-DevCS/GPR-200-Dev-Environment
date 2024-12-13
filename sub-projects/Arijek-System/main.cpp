@@ -1,10 +1,7 @@
 #include <iostream>
 #include "assets/Code/Scene Manager/SceneManager.h"
-#include "Bella/Mechanic/Terrain/TerrainGenerator.h"
+#include "assets/Code/Terrain/TerrainGenerator.h"
 #include "assets/Code/User Input/UserInput.h"
-
-#include "ak/Camera.h"
-
 
 #include "Bella/Definitions/Shapes/Vertex/drawShape.h"
 #include "Bella/Mechanic/Shader/shader.h"
@@ -36,7 +33,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
     // Set Up Camera Instances
-    ak::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
+    Bella_GPR200::Camera cam(glm::vec3(0.0f, 0.0f, 1.0f));
     Bella_GPR200::Camera isoCam(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 20.0f, true);
 
 
@@ -121,7 +118,7 @@ int main() {
         // Lighting Instantiation
         pointLight.SetLightUniforms(genModelShader);
 
-        terrain.Render(cam, view, projection, SCREEN_WIDTH, SCREEN_HEIGHT);
+        terrain.Render(cam, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         snowSystem.Update(deltaTime, terrainWidth, terrainDepth);
         snowSystem.Render(view, projection);
