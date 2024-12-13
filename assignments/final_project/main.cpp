@@ -1,4 +1,7 @@
 
+#include <tchar.h>
+#include <libloaderapi.h>
+#include <filesystem>
 #include "Bella/Mechanic/Scene/Scene.h"
 
 #define MAX_SNOW_PARTICLES 3000
@@ -29,6 +32,11 @@ Bella_GPR200::ParticleConfig snowConfig;
 
 
 int main() {
+    // Get the current working directory
+    std::filesystem::path cwd = std::filesystem::current_path();
+
+    // Output the current working directory
+    std::cout << "Current working directory: " << cwd << std::endl;
 
     //Terrain
     //TerrainGenerator terrain(10, 5.0f, 23);
