@@ -45,8 +45,6 @@ int main() {
     scene.addModel(modelTwo);
     scene.addLight(pointLight);
 
-
-
     scene.play();
 
     return 0;
