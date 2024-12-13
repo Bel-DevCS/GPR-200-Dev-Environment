@@ -62,10 +62,10 @@ int main() {
     Bella_GPR200::Shader snowShader("assets/Shaders/Particles/Snow/SnowVert.vert", "assets/Shaders/Particles/Snow/SnowFrag.frag");
 
     // Initialize Models
-     Bella_GPR200::Model testModel("assets/Models/plant.fbx");
+     //Bella_GPR200::Model testModel("assets/Models/plant.fbx");
 
     //Terrain
-    TerrainGenerator terrain(10, 5.0f, 7);
+    TerrainGenerator terrain(10, 5.0f, 23);
 
     //Particle System
     Bella_GPR200::ParticleSystem snowSystem(1000, snowShader);
@@ -75,8 +75,8 @@ int main() {
     snowConfig.velocityMax = glm::vec3(0.1f, -0.5f, 0.1f);
     snowConfig.colorStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     snowConfig.colorEnd = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
-    snowConfig.lifespanMin = 5.0f;
-    snowConfig.lifespanMax = 7.0f;
+    snowConfig.lifespanMin = 15.0f;
+    snowConfig.lifespanMax = 30.0f;
     snowConfig.sizeMin = 0.05f;
     snowConfig.sizeMax = 0.1f;
 
@@ -123,20 +123,6 @@ int main() {
         snowSystem.Update(deltaTime, glm::vec3(0.0f, 10.0f, 0.0f), terrainWidth, terrainDepth);
         snowSystem.Render(view, projection);
 
-        /*
-        // Model Transformation
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(10.0f, 0.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
-        genModelShader.setMat4("model", model);
-
-        // Draw the model
-        testModel.Draw(genModelShader);
-
-        */
-
-        // Draw UI
-      //  SM.LightWindow(pointLight);
 
         // Swap buffers and poll events
         glfwSwapBuffers(window);

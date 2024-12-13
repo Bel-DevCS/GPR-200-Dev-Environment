@@ -39,21 +39,35 @@ TerrainGenerator::TerrainGenerator(int gridSize, float scale, int seed)
     }
 
     // Step 4: Generate indices for terrain triangles
-    for (int x = 0; x < gridSize; ++x) {
-        for (int z = 0; z < gridSize; ++z) {
-            unsigned int topLeft = x + z * (gridSize + 1);
+    for (int x = 0; x <= gridSize; ++x)
+        {
+        for (int z = 0; z <= gridSize; ++z) {
+            unsigned int topLeft = (x + 1) + (z + 1) * (gridSize + 2); // Account for extended grid
             unsigned int topRight = topLeft + 1;
-            unsigned int bottomLeft = topLeft + (gridSize + 1);
+            unsigned int bottomLeft = topLeft + (gridSize + 2);
             unsigned int bottomRight = bottomLeft + 1;
 
-            // Create two triangles for each quad
-            indices.push_back(topLeft);
-            indices.push_back(bottomLeft);
-            indices.push_back(topRight);
+            // Create terrain triangles
+            if (x < gridSize && z < gridSize) {
+                indices.push_back(topLeft);
+                indices.push_back(bottomLeft);
+                indices.push_back(topRight);
 
-            indices.push_back(topRight);
-            indices.push_back(bottomLeft);
-            indices.push_back(bottomRight);
+                indices.push_back(topRight);
+                indices.push_back(bottomLeft);
+                indices.push_back(bottomRight);
+            }
+
+            // Create edge drop triangles
+            if (x == 0 || z == 0 || x == gridSize || z == gridSize) {
+                indices.push_back(topLeft);
+                indices.push_back(bottomLeft);
+                indices.push_back(topRight);
+
+                indices.push_back(topRight);
+                indices.push_back(bottomLeft);
+                indices.push_back(bottomRight);
+            }
         }
     }
 
@@ -66,14 +80,19 @@ void TerrainGenerator::SmoothHeightMap(std::vector<std::vector<float>>& heightMa
     std::vector<std::vector<float>> tempMap = heightMap;
 
     // Smooth each non-border cell by averaging its neighbors
-    for (int x = 1; x < gridSize; ++x) {
-        for (int z = 1; z < gridSize; ++z) {
-            float sum = heightMap[x][z] +
-                        heightMap[x - 1][z] +
-                        heightMap[x + 1][z] +
-                        heightMap[x][z - 1] +
-                        heightMap[x][z + 1];
-            tempMap[x][z] = sum / 5.0f; // Average value
+    for (int x = -1; x <= gridSize; ++x)
+        {
+        for (int z = -1; z <= gridSize; ++z)
+            {
+            float height;
+            if (x == -1 || z == -1 || x == gridSize || z == gridSize) {
+                height = minHeight - 5.0f;
+            } else {
+                height = heightMap[x][z];
+            }
+            vertices.push_back((x - gridSize / 2.0f) * scale); // X position
+            vertices.push_back(height);                        // Y position (height)
+            vertices.push_back((z - gridSize / 2.0f) * scale); // Z position
         }
     }
 
@@ -140,12 +159,14 @@ void TerrainGenerator::Render(Bella_GPR200::Camera& camera, int width, int heigh
 
     //Setting Fog Uniforms
     NoiseShader.setVec3("fogColor", glm::vec3(0.7f, 0.8f, 0.9f));   // Fog color
-    NoiseShader.setFloat("fogStart", 3.0f);
-    NoiseShader.setFloat("fogEnd", 10.0f);
+    NoiseShader.setFloat("fogStart", 10.0f);
+    NoiseShader.setFloat("fogEnd", 50.0f);
 
     //Setting Uniforms for Gradient / Colour Mapping
     NoiseShader.setFloat("iceHeight", iceHeight);
     NoiseShader.setFloat("snowHeight", snowHeight);
+
+;
 
     //Draw Call
     glBindVertexArray(VAO);
