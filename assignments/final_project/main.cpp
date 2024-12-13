@@ -11,7 +11,7 @@ Bella_GPR200::Model plantModel("./assets/Models/plant.fbx", genModelShader);
 
 Bella_GPR200::Model cupModel("./assets/Models/teamugfbx.fbx", genModelShader);
 
-Bella_GPR200::Model catModel("./assets/Models/tree.fbx", genModelShader);
+Bella_GPR200::Model stumpModel("./assets/Models/tree.fbx", genModelShader);
 
 
 // Create a Point Light
@@ -49,16 +49,18 @@ int main() {
     //scene.setTerrain(terrain);
 
     cupModel.setScale(glm::vec3(0.15f, 0.15f, 0.15f));
-    cupModel.setRotation(glm::vec3 (0.0f, 0.0f, 90.0f));
+    cupModel.setRotation(glm::vec3 (90.0f, 90.0f, 0.0f));
 
-    catModel.setScale(glm::vec3 (0.1f, 0.1f, 0.1f));
-    catModel.setPosition(glm::vec3(-2.0f, -1.0f, -3.0f));
+    stumpModel.setScale(glm::vec3 (0.1f, 0.1f, 0.1f));
+    stumpModel.setPosition(glm::vec3(-2.0f, -1.0f, -3.0f));
+    stumpModel.setRotation(glm::vec3(45.0f, 27.5f, 0.0f));
 
     plantModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
 
+
     scene.addModel(plantModel);
     scene.addModel(cupModel);
-    scene.addModel(catModel);
+    scene.addModel(stumpModel);
     scene.addLight(pointLight);
 
     scene.play();

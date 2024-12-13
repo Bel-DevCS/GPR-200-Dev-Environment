@@ -3,6 +3,9 @@
 //
 
 #include "Scene.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 
 #include <glm/ext/matrix_clip_space.hpp>
 
@@ -96,10 +99,19 @@ namespace final_project {
 
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
+
+        // ImGUI Init
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGui::StyleColorsDark();
+        ImGui_ImplGlfw_InitForOpenGL(mWindow, true);
+        ImGui_ImplOpenGL3_Init("#version 330 core");
     }
 
     void Scene::drawUI() {
         // TODO: Implement based on project specifics. Likely will not abstract functionality
+
     }
 
     void Scene::scroll_callback(GLFWwindow *window, double xOffset, double yOffset) {
