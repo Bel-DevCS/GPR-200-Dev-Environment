@@ -28,13 +28,16 @@ namespace Bella_GPR200
         Shader& getShader() { return mShader; }
 
         void setPosition(glm::vec3 position) { mPosition = position; }
-        glm::vec3 getPosition() { return mPosition; }
+        glm::vec3 getPosition() const { return mPosition; }
 
         void setScale(glm::vec3 scale) { mScale = scale; }
-        glm::vec3 getScale() { return mScale; }
+        glm::vec3 getScale() const { return mScale; }
 
         void setRotation(glm::vec3 rotation) { mRotation = rotation; }
-        glm::vec3 getRotation() { return mRotation; }
+        glm::vec3 getRotation() const { return mRotation; }
+
+        void setVisibility(bool visibility) { mVisibility  = visibility; }
+        bool getVisibility() const { return mVisibility ; }
 
     private:
         std::vector<Mesh> meshes;
@@ -43,6 +46,8 @@ namespace Bella_GPR200
         glm::vec3 mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 mScale = glm::vec3(1.0f, 1.0f, 1.0f);
         glm::vec3 mRotation = glm::vec3(0.0f, 0.0f,0.0f);
+
+        bool mVisibility = true;
 
         void loadModel(std::string path);
         void processNode(aiNode *node, const aiScene *scene);

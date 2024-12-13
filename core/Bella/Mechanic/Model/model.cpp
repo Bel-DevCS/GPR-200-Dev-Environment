@@ -11,6 +11,9 @@ namespace Bella_GPR200
 {
     void Model::Draw()
     {
+        if (!getVisibility())
+            return;
+
         // send model to shader
         glm::mat4 model = glm::mat4 (1.0f);
         model = glm::translate(model, mPosition);

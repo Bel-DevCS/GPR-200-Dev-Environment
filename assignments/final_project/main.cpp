@@ -52,11 +52,13 @@ int main() {
     cupModel.setRotation(glm::vec3 (90.0f, 90.0f, 0.0f));
 
     stumpModel.setScale(glm::vec3 (0.1f, 0.1f, 0.1f));
-    stumpModel.setPosition(glm::vec3(-2.0f, -1.0f, -3.0f));
+    stumpModel.setPosition(glm::vec3(-2.0f, 0.75f, -3.0f));
     stumpModel.setRotation(glm::vec3(45.0f, 27.5f, 0.0f));
 
-    plantModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
+    plantModel.setPosition(glm::vec3(1.0f, -0.5f, -1.0f));
 
+    // Uncomment to make the cup invisible
+    // cupModel.setVisibility(false);
 
     scene.addModel(plantModel);
     scene.addModel(cupModel);
