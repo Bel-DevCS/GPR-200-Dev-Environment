@@ -118,22 +118,22 @@ namespace final_project {
 
         for (auto& model : mModels) {
             if (ImGui::Begin((model.getName() + " Settings").c_str())) {
-                ImGui::SetWindowSize(ImVec2(20, 15));
+                ImGui::SetWindowSize(ImVec2(500, 125));
                 // Temporary copies for user input
                 glm::vec3 newPosition = model.getPosition();
                 glm::vec3 newRotation = model.getRotation();
                 glm::vec3 newScale = model.getScale();
                 bool newIsVisible = model.getVisibility();
 
-                if (ImGui::InputFloat3("Position", &newPosition[0])) {
+                if (ImGui::SliderFloat3("Position", &newPosition[0], -1.0f, 1.0f)) {
                     model.setPosition(newPosition); // Update temporary model settings on change
                 }
 
-                if (ImGui::InputFloat3("Rotation", &newRotation[0])) {
+                if (ImGui::SliderFloat3("Rotation", &newRotation[0], 0.0f, 360.0f)) {
                     model.setRotation(newRotation); // Update temporary model settings on change
                 }
 
-                if (ImGui::InputFloat3("Scale", &newScale[0])) {
+                if (ImGui::SliderFloat3("Scale", &newScale[0], 0.01f, 3.0f)) {
                     model.setScale(newScale); // Update temporary model settings on change
                 }
 
