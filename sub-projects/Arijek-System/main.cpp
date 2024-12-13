@@ -81,6 +81,7 @@ int main() {
     snowConfig.sizeMax = 0.1f;
 
     snowSystem.SetConfig(snowConfig);
+    snowSystem.setPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 
     float terrainWidth = terrain.GetGridSize() * terrain.GetScale();
     float terrainDepth = terrain.GetGridSize() * terrain.GetScale();
@@ -90,8 +91,6 @@ int main() {
         {
       glViewport(0, 0, width, height);
         });
-
-    snowSystem.setPosition(glm::vec3(0.0f, 10.0f, 0.0f));
 
     // Render Loop
     while (!glfwWindowShouldClose(window)) {

@@ -18,11 +18,13 @@ Bella_GPR200::Lighting::Light pointLight = Bella_GPR200::Lighting::Light::Create
 );
 
 //Particles
-Bella_GPR200::Shader snowShader("assets/Shaders/Particles/Snow/SnowVert.vert", "assets/Shaders/Particles/Snow/SnowFrag.frag");
+Bella_GPR200::Shader snowShader("./assets/Shaders/Particles/Snow/SnowVert.vert", "./assets/Shaders/Particles/Snow/SnowFrag.frag");
 Bella_GPR200::ParticleSystem snowParticleGenerator(MAX_SNOW_PARTICLES,snowShader);
 
+Bella_GPR200::ParticleConfig snowConfig;
+
+
 int main() {
-    Bella_GPR200::ParticleConfig snowConfig;
     snowConfig.velocityMin = glm::vec3(-0.1f, -0.5f, -0.1f);
     snowConfig.velocityMax = glm::vec3(0.1f, -0.5f, 0.1f);
     snowConfig.colorStart = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -32,9 +34,10 @@ int main() {
     snowConfig.sizeMin = 0.05f;
     snowConfig.sizeMax = 0.1f;
 
-    snowParticleGenerator.setPosition(glm::vec3 (0.0f, 10.0f, 0.0f));
-
     snowParticleGenerator.SetConfig(snowConfig);
+    snowParticleGenerator.setPosition(glm::vec3 (0.0f, 10.0f, 0.0f));
+    scene.addParticleGenerator(snowParticleGenerator);
+
 
     testModel.setPosition(glm::vec3(1.0f, 0.5f, -1.0f));
 
@@ -42,7 +45,7 @@ int main() {
     scene.addModel(modelTwo);
     scene.addLight(pointLight);
 
-    scene.addParticleGenerator(snowParticleGenerator);
+
 
     scene.play();
 

@@ -46,6 +46,7 @@ namespace final_project {
                 model.Draw();
             }
 
+            // Draw call on all particle systems
             for (auto& particleGenerator : mParticleGenerators) {
                 particleGenerator.Update(deltaTime, 50, 50);
                 particleGenerator.Render(view, projection);
