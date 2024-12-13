@@ -16,6 +16,7 @@
 
 namespace final_project {
 
+    // Class author: Anne
 class Scene {
 public:
     Scene();

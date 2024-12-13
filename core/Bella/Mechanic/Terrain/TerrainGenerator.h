@@ -5,6 +5,7 @@
 #include "../../../ew/external/glad.h"
 #include <vector>
 
+// Entire Terrain Generation class by Bella
 class TerrainGenerator
 {
 public:

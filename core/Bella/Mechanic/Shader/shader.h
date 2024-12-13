@@ -7,6 +7,7 @@
 
 #include "../Lighting/Light Class/light.h"
 
+// Entire Shader Class by Bella
 namespace Bella_GPR200
 {
 

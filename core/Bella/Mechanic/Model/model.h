@@ -15,6 +15,7 @@
 #include <assimp/postprocess.h>
 #include "../../../ew/external/stb_image.h"
 
+// Model class Written by Bella
 namespace Bella_GPR200
 {
     class Model
@@ -22,10 +23,12 @@ namespace Bella_GPR200
         public:
 
         explicit Model(const char *path, Shader& shader) : mShader(shader) { loadModel(path); }
+        // Constructor by Anne
         explicit Model(std::string name, const char *path, Shader& shader) : mName(name), mShader(shader) { loadModel(path); }
 
         void Draw();
 
+        // Get and Set methods by Anne
         Shader& getShader() { return mShader; }
         void setShader(Shader& shader) { mShader = shader; }
 
@@ -47,10 +50,12 @@ namespace Bella_GPR200
         std::vector<Mesh> meshes;
         std::string directory;
 
+        // Pos, Scale, Rot by Anne
         glm::vec3 mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
         glm::vec3 mScale = glm::vec3(1.0f, 1.0f, 1.0f);
         glm::vec3 mRotation = glm::vec3(0.0f, 0.0f,0.0f);
 
+        // Visibility by anne
         bool mVisibility = true;
 
         void loadModel(std::string path);
@@ -62,8 +67,10 @@ namespace Bella_GPR200
 
         std::vector<Texture> textures_loaded;
 
+        // Model containing shader refactor by Anne
         Shader mShader;
 
+        // Name by Anne
         const std::string mName;
 
         unsigned int GenerateTexture(const char* path, const std::string& directory);

@@ -10,6 +10,8 @@
 
 namespace ak {
 
+
+    // Camera Class by Anne
 class Camera {
 public:
     Camera();

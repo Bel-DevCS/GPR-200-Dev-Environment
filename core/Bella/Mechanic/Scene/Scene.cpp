@@ -9,6 +9,7 @@
 
 #include <glm/ext/matrix_clip_space.hpp>
 
+// Class Author: Anne
 namespace final_project {
     Scene::Scene() {
         // Does this need any implementation? I dont actually think anything needs to happen here

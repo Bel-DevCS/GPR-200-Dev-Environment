@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+// Particle System written by Bella
 namespace Bella_GPR200
 {
     // Configuration struct to define the properties of a particle system

@@ -9,12 +9,14 @@
 
 namespace Bella_GPR200
 {
+    // Draw the model (Function by Bella)
     void Model::Draw()
     {
         if (!getVisibility())
             return;
 
         // send model to shader
+        // Exclusively this part of the function by Anne
         glm::mat4 model = glm::mat4 (1.0f);
         model = glm::translate(model, mPosition);
         model = glm::scale(model, mScale);
