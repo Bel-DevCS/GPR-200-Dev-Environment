@@ -1,7 +1,7 @@
 
 #include "Bella/Mechanic/Scene/Scene.h"
 
-#define MAX_SNOW_PARTICLES 1000
+#define MAX_SNOW_PARTICLES 3000
 
 // Scene must be the first thing created, as it inits OpenGL from constructor
 final_project::Scene scene;

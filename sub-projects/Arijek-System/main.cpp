@@ -68,7 +68,7 @@ int main() {
     TerrainGenerator terrain(10, 5.0f, 23);
 
     //Particle System
-    Bella_GPR200::ParticleSystem snowSystem(1000, snowShader);
+    Bella_GPR200::ParticleSystem snowSystem(3000, snowShader);
 
     Bella_GPR200::ParticleConfig snowConfig;
     snowConfig.velocityMin = glm::vec3(-0.1f, -0.5f, -0.1f);
